@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F692726A2453B4900070B91D /* Wake Up WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F69272692453B4900070B91D /* Wake Up WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F69272702453B4900070B91D /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F692726E2453B4900070B91D /* Interface.storyboard */; };
+		F69272722453B4920070B91D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F69272712453B4920070B91D /* Assets.xcassets */; };
+		F69272792453B4920070B91D /* Wake Up WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F69272782453B4920070B91D /* Wake Up WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F692727E2453B4920070B91D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F692727D2453B4920070B91D /* ContentView.swift */; };
+		F69272802453B4920070B91D /* HostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F692727F2453B4920070B91D /* HostingController.swift */; };
+		F69272822453B4920070B91D /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272812453B4920070B91D /* ExtensionDelegate.swift */; };
+		F69272842453B4920070B91D /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272832453B4920070B91D /* NotificationController.swift */; };
+		F69272862453B4920070B91D /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272852453B4920070B91D /* NotificationView.swift */; };
+		F69272882453B4920070B91D /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272872453B4920070B91D /* ComplicationController.swift */; };
+		F692728A2453B4920070B91D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F69272892453B4920070B91D /* Assets.xcassets */; };
+		F692728D2453B4920070B91D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F692728C2453B4920070B91D /* Preview Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F692726B2453B4900070B91D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F692725F2453B48F0070B91D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F69272682453B4900070B91D;
+			remoteInfo = "Wake Up WatchKit App";
+		};
+		F692727A2453B4920070B91D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F692725F2453B48F0070B91D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F69272772453B4920070B91D;
+			remoteInfo = "Wake Up WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F69272952453B4920070B91D /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F69272792453B4920070B91D /* Wake Up WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F69272992453B4920070B91D /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				F692726A2453B4900070B91D /* Wake Up WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		F69272652453B48F0070B91D /* Wake Up.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wake Up.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F69272692453B4900070B91D /* Wake Up WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wake Up WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F692726F2453B4900070B91D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		F69272712453B4920070B91D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F69272732453B4920070B91D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F69272782453B4920070B91D /* Wake Up WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Wake Up WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F692727D2453B4920070B91D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F692727F2453B4920070B91D /* HostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingController.swift; sourceTree = "<group>"; };
+		F69272812453B4920070B91D /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		F69272832453B4920070B91D /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		F69272852453B4920070B91D /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		F69272872453B4920070B91D /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		F69272892453B4920070B91D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F692728C2453B4920070B91D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F692728E2453B4920070B91D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F692728F2453B4920070B91D /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F69272752453B4920070B91D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F692725E2453B48F0070B91D = {
+			isa = PBXGroup;
+			children = (
+				F692726D2453B4900070B91D /* Wake Up WatchKit App */,
+				F692727C2453B4920070B91D /* Wake Up WatchKit Extension */,
+				F69272662453B48F0070B91D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F69272662453B48F0070B91D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F69272652453B48F0070B91D /* Wake Up.app */,
+				F69272692453B4900070B91D /* Wake Up WatchKit App.app */,
+				F69272782453B4920070B91D /* Wake Up WatchKit Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F692726D2453B4900070B91D /* Wake Up WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				F692726E2453B4900070B91D /* Interface.storyboard */,
+				F69272712453B4920070B91D /* Assets.xcassets */,
+				F69272732453B4920070B91D /* Info.plist */,
+			);
+			path = "Wake Up WatchKit App";
+			sourceTree = "<group>";
+		};
+		F692727C2453B4920070B91D /* Wake Up WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F692727D2453B4920070B91D /* ContentView.swift */,
+				F692727F2453B4920070B91D /* HostingController.swift */,
+				F69272812453B4920070B91D /* ExtensionDelegate.swift */,
+				F69272832453B4920070B91D /* NotificationController.swift */,
+				F69272852453B4920070B91D /* NotificationView.swift */,
+				F69272872453B4920070B91D /* ComplicationController.swift */,
+				F69272892453B4920070B91D /* Assets.xcassets */,
+				F692728E2453B4920070B91D /* Info.plist */,
+				F692728F2453B4920070B91D /* PushNotificationPayload.apns */,
+				F692728B2453B4920070B91D /* Preview Content */,
+			);
+			path = "Wake Up WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		F692728B2453B4920070B91D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F692728C2453B4920070B91D /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F69272642453B48F0070B91D /* Wake Up */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F692729A2453B4920070B91D /* Build configuration list for PBXNativeTarget "Wake Up" */;
+			buildPhases = (
+				F69272632453B48F0070B91D /* Resources */,
+				F69272992453B4920070B91D /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F692726C2453B4900070B91D /* PBXTargetDependency */,
+			);
+			name = "Wake Up";
+			productName = "Wake Up";
+			productReference = F69272652453B48F0070B91D /* Wake Up.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		F69272682453B4900070B91D /* Wake Up WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F69272962453B4920070B91D /* Build configuration list for PBXNativeTarget "Wake Up WatchKit App" */;
+			buildPhases = (
+				F69272672453B4900070B91D /* Resources */,
+				F69272952453B4920070B91D /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F692727B2453B4920070B91D /* PBXTargetDependency */,
+			);
+			name = "Wake Up WatchKit App";
+			productName = "Wake Up WatchKit App";
+			productReference = F69272692453B4900070B91D /* Wake Up WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		F69272772453B4920070B91D /* Wake Up WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F69272922453B4920070B91D /* Build configuration list for PBXNativeTarget "Wake Up WatchKit Extension" */;
+			buildPhases = (
+				F69272742453B4920070B91D /* Sources */,
+				F69272752453B4920070B91D /* Frameworks */,
+				F69272762453B4920070B91D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Wake Up WatchKit Extension";
+			productName = "Wake Up WatchKit Extension";
+			productReference = F69272782453B4920070B91D /* Wake Up WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F692725F2453B48F0070B91D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1140;
+				LastUpgradeCheck = 1140;
+				ORGANIZATIONNAME = "Zihan Qi";
+				TargetAttributes = {
+					F69272642453B48F0070B91D = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+					F69272682453B4900070B91D = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+					F69272772453B4920070B91D = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+				};
+			};
+			buildConfigurationList = F69272622453B48F0070B91D /* Build configuration list for PBXProject "Wake Up" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F692725E2453B48F0070B91D;
+			productRefGroup = F69272662453B48F0070B91D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F69272642453B48F0070B91D /* Wake Up */,
+				F69272682453B4900070B91D /* Wake Up WatchKit App */,
+				F69272772453B4920070B91D /* Wake Up WatchKit Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F69272632453B48F0070B91D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F69272672453B4900070B91D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F69272722453B4920070B91D /* Assets.xcassets in Resources */,
+				F69272702453B4900070B91D /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F69272762453B4920070B91D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F692728D2453B4920070B91D /* Preview Assets.xcassets in Resources */,
+				F692728A2453B4920070B91D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F69272742453B4920070B91D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F69272802453B4920070B91D /* HostingController.swift in Sources */,
+				F692727E2453B4920070B91D /* ContentView.swift in Sources */,
+				F69272842453B4920070B91D /* NotificationController.swift in Sources */,
+				F69272822453B4920070B91D /* ExtensionDelegate.swift in Sources */,
+				F69272862453B4920070B91D /* NotificationView.swift in Sources */,
+				F69272882453B4920070B91D /* ComplicationController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F692726C2453B4900070B91D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F69272682453B4900070B91D /* Wake Up WatchKit App */;
+			targetProxy = F692726B2453B4900070B91D /* PBXContainerItemProxy */;
+		};
+		F692727B2453B4920070B91D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F69272772453B4920070B91D /* Wake Up WatchKit Extension */;
+			targetProxy = F692727A2453B4920070B91D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F692726E2453B4900070B91D /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F692726F2453B4900070B91D /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F69272902453B4920070B91D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F69272912453B4920070B91D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F69272932453B4920070B91D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Wake Up WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = CJYVMFG9D9;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Wake Up WatchKit Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "qzhann.Wake-Up.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Debug;
+		};
+		F69272942453B4920070B91D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Wake Up WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = CJYVMFG9D9;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Wake Up WatchKit Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "qzhann.Wake-Up.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Release;
+		};
+		F69272972453B4920070B91D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CJYVMFG9D9;
+				IBSC_MODULE = Wake_Up_WatchKit_Extension;
+				INFOPLIST_FILE = "Wake Up WatchKit App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "qzhann.Wake-Up.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Debug;
+		};
+		F69272982453B4920070B91D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CJYVMFG9D9;
+				IBSC_MODULE = Wake_Up_WatchKit_Extension;
+				INFOPLIST_FILE = "Wake Up WatchKit App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "qzhann.Wake-Up.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Release;
+		};
+		F692729B2453B4920070B91D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CJYVMFG9D9;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "qzhann.Wake-Up";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F692729C2453B4920070B91D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CJYVMFG9D9;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "qzhann.Wake-Up";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F69272622453B48F0070B91D /* Build configuration list for PBXProject "Wake Up" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F69272902453B4920070B91D /* Debug */,
+				F69272912453B4920070B91D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F69272922453B4920070B91D /* Build configuration list for PBXNativeTarget "Wake Up WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F69272932453B4920070B91D /* Debug */,
+				F69272942453B4920070B91D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F69272962453B4920070B91D /* Build configuration list for PBXNativeTarget "Wake Up WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F69272972453B4920070B91D /* Debug */,
+				F69272982453B4920070B91D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F692729A2453B4920070B91D /* Build configuration list for PBXNativeTarget "Wake Up" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F692729B2453B4920070B91D /* Debug */,
+				F692729C2453B4920070B91D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F692725F2453B48F0070B91D /* Project object */;
+}
