@@ -125,15 +125,15 @@
 		F692727C2453B4920070B91D /* Wake Up WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
-				F692727D2453B4920070B91D /* ContentView.swift */,
 				F692727F2453B4920070B91D /* HostingController.swift */,
 				F69272812453B4920070B91D /* ExtensionDelegate.swift */,
-				F69272832453B4920070B91D /* NotificationController.swift */,
-				F69272852453B4920070B91D /* NotificationView.swift */,
-				F69272872453B4920070B91D /* ComplicationController.swift */,
-				F69272892453B4920070B91D /* Assets.xcassets */,
-				F692728E2453B4920070B91D /* Info.plist */,
-				F692728F2453B4920070B91D /* PushNotificationPayload.apns */,
+				F692727D2453B4920070B91D /* ContentView.swift */,
+				F69272A02453B5B50070B91D /* Models */,
+				F69272A12453B5DB0070B91D /* Views */,
+				F692729E2453B5240070B91D /* New Group */,
+				F692729D2453B4FD0070B91D /* Notifications */,
+				F692729F2453B59F0070B91D /* Complications */,
+				F69272A22453B6820070B91D /* Resources */,
 				F692728B2453B4920070B91D /* Preview Content */,
 			);
 			path = "Wake Up WatchKit Extension";
@@ -145,6 +145,54 @@
 				F692728C2453B4920070B91D /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F692729D2453B4FD0070B91D /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				F69272832453B4920070B91D /* NotificationController.swift */,
+				F69272852453B4920070B91D /* NotificationView.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		F692729E2453B5240070B91D /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		F692729F2453B59F0070B91D /* Complications */ = {
+			isa = PBXGroup;
+			children = (
+				F69272872453B4920070B91D /* ComplicationController.swift */,
+			);
+			path = Complications;
+			sourceTree = "<group>";
+		};
+		F69272A02453B5B50070B91D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F69272A12453B5DB0070B91D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F69272A22453B6820070B91D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F69272892453B4920070B91D /* Assets.xcassets */,
+				F692728E2453B4920070B91D /* Info.plist */,
+				F692728F2453B4920070B91D /* PushNotificationPayload.apns */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
