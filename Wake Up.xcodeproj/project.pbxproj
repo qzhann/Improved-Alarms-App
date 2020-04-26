@@ -19,6 +19,10 @@
 		F69272882453B4920070B91D /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272872453B4920070B91D /* ComplicationController.swift */; };
 		F692728A2453B4920070B91D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F69272892453B4920070B91D /* Assets.xcassets */; };
 		F692728D2453B4920070B91D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F692728C2453B4920070B91D /* Preview Assets.xcassets */; };
+		F69272A42453BCA60070B91D /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A32453BCA60070B91D /* UserData.swift */; };
+		F69272A62453BCC20070B91D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A52453BCC20070B91D /* Alarm.swift */; };
+		F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A72453BDF40070B91D /* AlarmTime.swift */; };
+		F69272AA2453C1800070B91D /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A92453C1800070B91D /* UserState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +84,10 @@
 		F692728C2453B4920070B91D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F692728E2453B4920070B91D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F692728F2453B4920070B91D /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		F69272A32453BCA60070B91D /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		F69272A52453BCC20070B91D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		F69272A72453BDF40070B91D /* AlarmTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTime.swift; sourceTree = "<group>"; };
+		F69272A92453C1800070B91D /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +138,6 @@
 				F692727D2453B4920070B91D /* ContentView.swift */,
 				F69272A02453B5B50070B91D /* Models */,
 				F69272A12453B5DB0070B91D /* Views */,
-				F692729E2453B5240070B91D /* New Group */,
 				F692729D2453B4FD0070B91D /* Notifications */,
 				F692729F2453B59F0070B91D /* Complications */,
 				F69272A22453B6820070B91D /* Resources */,
@@ -156,13 +163,6 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
-		F692729E2453B5240070B91D /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		F692729F2453B59F0070B91D /* Complications */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +174,10 @@
 		F69272A02453B5B50070B91D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F69272A32453BCA60070B91D /* UserData.swift */,
+				F69272A92453C1800070B91D /* UserState.swift */,
+				F69272A52453BCC20070B91D /* Alarm.swift */,
+				F69272A72453BDF40070B91D /* AlarmTime.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -325,7 +329,11 @@
 			files = (
 				F69272802453B4920070B91D /* HostingController.swift in Sources */,
 				F692727E2453B4920070B91D /* ContentView.swift in Sources */,
+				F69272A42453BCA60070B91D /* UserData.swift in Sources */,
+				F69272A62453BCC20070B91D /* Alarm.swift in Sources */,
 				F69272842453B4920070B91D /* NotificationController.swift in Sources */,
+				F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */,
+				F69272AA2453C1800070B91D /* UserState.swift in Sources */,
 				F69272822453B4920070B91D /* ExtensionDelegate.swift in Sources */,
 				F69272862453B4920070B91D /* NotificationView.swift in Sources */,
 				F69272882453B4920070B91D /* ComplicationController.swift in Sources */,
