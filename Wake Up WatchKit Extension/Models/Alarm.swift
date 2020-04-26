@@ -56,19 +56,8 @@ enum SleepReminderState {
 
 // MARK: - Equatable
 
-extension Alarm: Equatable {
-    static func == (lhs: Alarm, rhs: Alarm) -> Bool {
-        return lhs.isOn == rhs.isOn &&
-        lhs.isMuted == rhs.isMuted &&
-        lhs.finalAlarmTime == rhs.finalAlarmTime &&
-        lhs.snoozeState == rhs.snoozeState &&
-        lhs.departureTime == rhs.departureTime &&
-        lhs.sleepReminderState == rhs.sleepReminderState
-    }
-}
-
+extension Alarm: Equatable {}
 extension SnoozeState: Equatable {}
-
 extension SleepReminderState: Equatable {}
 
 // MARK: - Codable
