@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import SwiftUI
 
-final class UserData {
-    var alarms: [Alarm]
+final class UserData: ObservableObject {
+    @Published var alarms: [Alarm]
     var nextAlarm: Alarm
     var prefillAlarm: Alarm?
     var userState: UserState = .notRinging
@@ -20,6 +21,31 @@ final class UserData {
         self.nextAlarm = alarms[1]
     }
 }
+
+var testUserData = UserData(alarms: Alarm.firstTimeAlarms(for: .tuesday))
+
+// MARK: - View model
+
+enum ScheduleState {
+    case active, activeAndMuted, inactive
+}
+
+extension UserData {
+    /// Returns the schedule state of the alarm.
+    func scheduleState(for alarm: Alarm) -> ScheduleState {
+        guard alarms.contains(alarm) else { fatalError("Cannot find alarm") }
+        let alarmIndex = alarms.firstIndex(of: alarm)!
+        
+        if alarmIndex == 0 || !alarm.isOn {
+            return .inactive
+        } else if alarm.isMuted {
+            return .activeAndMuted
+        } else {
+            return .active
+        }
+    }
+}
+
 
 // MARK: - Equatable
 

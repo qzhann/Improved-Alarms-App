@@ -20,9 +20,13 @@
 		F692728A2453B4920070B91D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F69272892453B4920070B91D /* Assets.xcassets */; };
 		F692728D2453B4920070B91D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F692728C2453B4920070B91D /* Preview Assets.xcassets */; };
 		F69272A42453BCA60070B91D /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A32453BCA60070B91D /* UserData.swift */; };
-		F69272A62453BCC20070B91D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A52453BCC20070B91D /* Alarm.swift */; };
 		F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A72453BDF40070B91D /* AlarmTime.swift */; };
 		F69272AA2453C1800070B91D /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A92453C1800070B91D /* UserState.swift */; };
+		F69273D52455662F0070B91D /* AlarmList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273D42455662F0070B91D /* AlarmList.swift */; };
+		F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273D624556B1C0070B91D /* AlarmCard.swift */; };
+		F69273D924556D6F0070B91D /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273D824556D6F0070B91D /* Weekday.swift */; };
+		F69273DC2456477E0070B91D /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273DB2456477E0070B91D /* Color+Helpers.swift */; };
+		F69273DE24569A320070B91D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273DD24569A320070B91D /* Alarm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,9 +89,13 @@
 		F692728E2453B4920070B91D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F692728F2453B4920070B91D /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		F69272A32453BCA60070B91D /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
-		F69272A52453BCC20070B91D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 		F69272A72453BDF40070B91D /* AlarmTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTime.swift; sourceTree = "<group>"; };
 		F69272A92453C1800070B91D /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
+		F69273D42455662F0070B91D /* AlarmList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmList.swift; sourceTree = "<group>"; };
+		F69273D624556B1C0070B91D /* AlarmCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmCard.swift; sourceTree = "<group>"; };
+		F69273D824556D6F0070B91D /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
+		F69273DB2456477E0070B91D /* Color+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Helpers.swift"; sourceTree = "<group>"; };
+		F69273DD24569A320070B91D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +146,7 @@
 				F692727D2453B4920070B91D /* ContentView.swift */,
 				F69272A02453B5B50070B91D /* Models */,
 				F69272A12453B5DB0070B91D /* Views */,
+				F69273DA245647480070B91D /* Utilities */,
 				F692729D2453B4FD0070B91D /* Notifications */,
 				F692729F2453B59F0070B91D /* Complications */,
 				F69272A22453B6820070B91D /* Resources */,
@@ -176,8 +185,9 @@
 			children = (
 				F69272A32453BCA60070B91D /* UserData.swift */,
 				F69272A92453C1800070B91D /* UserState.swift */,
-				F69272A52453BCC20070B91D /* Alarm.swift */,
+				F69273DD24569A320070B91D /* Alarm.swift */,
 				F69272A72453BDF40070B91D /* AlarmTime.swift */,
+				F69273D824556D6F0070B91D /* Weekday.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -185,6 +195,8 @@
 		F69272A12453B5DB0070B91D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F69273D42455662F0070B91D /* AlarmList.swift */,
+				F69273D624556B1C0070B91D /* AlarmCard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -197,6 +209,14 @@
 				F692728F2453B4920070B91D /* PushNotificationPayload.apns */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		F69273DA245647480070B91D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F69273DB2456477E0070B91D /* Color+Helpers.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,10 +350,14 @@
 				F69272802453B4920070B91D /* HostingController.swift in Sources */,
 				F692727E2453B4920070B91D /* ContentView.swift in Sources */,
 				F69272A42453BCA60070B91D /* UserData.swift in Sources */,
-				F69272A62453BCC20070B91D /* Alarm.swift in Sources */,
+				F69273DC2456477E0070B91D /* Color+Helpers.swift in Sources */,
 				F69272842453B4920070B91D /* NotificationController.swift in Sources */,
+				F69273DE24569A320070B91D /* Alarm.swift in Sources */,
+				F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */,
 				F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */,
 				F69272AA2453C1800070B91D /* UserState.swift in Sources */,
+				F69273D924556D6F0070B91D /* Weekday.swift in Sources */,
+				F69273D52455662F0070B91D /* AlarmList.swift in Sources */,
 				F69272822453B4920070B91D /* ExtensionDelegate.swift in Sources */,
 				F69272862453B4920070B91D /* NotificationView.swift in Sources */,
 				F69272882453B4920070B91D /* ComplicationController.swift in Sources */,
