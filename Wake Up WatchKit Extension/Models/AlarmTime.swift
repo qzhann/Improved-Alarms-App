@@ -10,12 +10,14 @@ import Foundation
 
 /// An encapsulation of time.
 struct AlarmTime {
-    private var underlyingDateComponents: DateComponents = AlarmTime.baseComponents
+    private var underlyingDateComponents: DateComponents
     
     init(day: Weekday, hour: Int, minute: Int) {
-        underlyingDateComponents.weekday = day.rawValue
-        underlyingDateComponents.hour = hour
-        underlyingDateComponents.minute = minute
+        var components = AlarmTime.baseComponents
+        components.weekday = day.rawValue
+        components.hour = hour
+        components.minute = minute
+        self.underlyingDateComponents = components
     }
     
     private static let baseComponents: DateComponents = {
