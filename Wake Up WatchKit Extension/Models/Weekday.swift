@@ -9,11 +9,13 @@
 import Foundation
 
 enum Weekday: Int, CaseIterable {
-    case monday = 2, tuesday, wednesday, thursday, friday, saturday, sunday
+    case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
     
     func offSet(by offset: Int) -> Weekday {
         let effectiveOffset = offset % Weekday.allCases.count
-        return Weekday(rawValue: ((self.rawValue + effectiveOffset + Weekday.allCases.count) - 2) % Weekday.allCases.count + 2)!
+        let value = ((self.rawValue + effectiveOffset + Weekday.allCases.count) - 1) % Weekday.allCases.count + 1
+        guard value >= 1 && value <= 7 else { fatalError("Cannot initialize weekday with raw value \(value)") }
+        return Weekday(rawValue: value)!
     }
     
     var previous: Weekday {

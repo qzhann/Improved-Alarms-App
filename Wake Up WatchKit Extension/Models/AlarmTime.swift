@@ -12,6 +12,7 @@ import Foundation
 struct AlarmTime {
     private var underlyingDateComponents: DateComponents
     
+    /// Initializes an `AlarmTime` by specifying day, hour, and minute.
     init(day: Weekday, hour: Int, minute: Int) {
         var components = AlarmTime.baseComponents
         components.weekday = day.rawValue
@@ -20,6 +21,13 @@ struct AlarmTime {
         self.underlyingDateComponents = components
     }
     
+    /// Initializes an `AlarmTime` from a `Date`.
+    init(ofDate date: Date) {
+        let components = Calendar.autoupdatingCurrent.dateComponents([.weekday, .hour, .minute], from: date)
+        self.init(day: Weekday(rawValue: components.weekday!)!, hour: components.hour!, minute: components.minute!)
+    }
+    
+    /// The base date components used to initialize a `Weekday`.
     private static let baseComponents: DateComponents = {
         var components = DateComponents()
         components.calendar = Calendar.autoupdatingCurrent
@@ -29,6 +37,7 @@ struct AlarmTime {
         return components
     }()
     
+    /// A shared instance of date formatter. Formats `AlarmTime` to display correctly on the interface.
     private static let dateFormatter: DateFormatter = {
         var formatter = DateFormatter()
         formatter.timeStyle = .short
