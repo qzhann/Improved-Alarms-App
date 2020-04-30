@@ -30,7 +30,7 @@ class SystemTime {
     /// - Important: Limit the use of this initializer for testing.
     init(incrementInterval interval: TimeInterval, increment: TimeInterval) {
         self.currentDate = Date()
-        self.timer = Timer(timeInterval: interval, repeats: true) { (_) in
+        self.timer = Timer(timeInterval: interval, repeats: true) { [unowned self] (_) in
             self.currentDate = self.currentDate.advanced(by: increment)
         }
         RunLoop.current.add(timer!, forMode: .common)
