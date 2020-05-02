@@ -65,9 +65,9 @@ extension Color {
 // MARK: - View model
 extension Color {
     static func listRowPlatterColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = userData.scheduleState(for: alarm)
+        let sheduleState = alarm.scheduleState
         switch sheduleState {
-        case .scheduled:
+        case .scheduled, .ringing:
             return .systemOrange
         case .scheduledAndMuted:
             return .darkOrange
@@ -77,9 +77,9 @@ extension Color {
     }
     
     static func primaryTextColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = userData.scheduleState(for: alarm)
+        let sheduleState = alarm.scheduleState
         switch sheduleState {
-        case .scheduled, .scheduledAndMuted:
+        case .scheduled, .ringing, .scheduledAndMuted:
             return .darkText
         case .inactive:
             return .white
@@ -87,9 +87,9 @@ extension Color {
     }
     
     static func secondaryTextColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = userData.scheduleState(for: alarm)
+        let sheduleState = alarm.scheduleState
         switch sheduleState {
-        case .scheduled, .scheduledAndMuted:
+        case .scheduled, .ringing, .scheduledAndMuted:
             return .white
         case .inactive:
             return .systemTextGrey
