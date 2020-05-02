@@ -10,7 +10,7 @@ import Foundation
 
 /// An encapsulation of time.
 struct AlarmTime {
-    private var underlyingDateComponents: DateComponents
+    var underlyingDateComponents: DateComponents
     
     /// Initializes an `AlarmTime` by specifying day, hour, and minute.
     init(day: Weekday, hour: Int, minute: Int) {
@@ -18,13 +18,28 @@ struct AlarmTime {
         components.weekday = day.rawValue
         components.hour = hour
         components.minute = minute
-        self.underlyingDateComponents = components
+        // Initializes using the date to ensure that even if hour, minute is beyond normal range, they could be normalized.
+        self.init(ofDate: components.date!)
     }
     
     /// Initializes an `AlarmTime` from a `Date`.
     init(ofDate date: Date) {
-        let components = Calendar.autoupdatingCurrent.dateComponents([.weekday, .hour, .minute], from: date)
-        self.init(day: Weekday(rawValue: components.weekday!)!, hour: components.hour!, minute: components.minute!)
+        let dateComponents = Calendar.autoupdatingCurrent.dateComponents([.weekday, .hour, .minute], from: date)
+        var resultComponents = AlarmTime.baseComponents
+        resultComponents.weekday = dateComponents.weekday!
+        resultComponents.hour = dateComponents.hour!
+        resultComponents.minute = dateComponents.minute!
+        self.underlyingDateComponents = resultComponents
+    }
+    
+    /// Returns an `AlarmTime` indicating the start of day of the instance.
+    var startOfDay: AlarmTime {
+        return AlarmTime(ofDate: Calendar.autoupdatingCurrent.startOfDay(for: underlyingDateComponents.date!))
+    }
+    
+    /// Returns an  `AlarmTime` advanced by the `hours` hours and `minutes` minutes from the current `AlarmTime` instance.
+    func advancedBy(hours: Int = 0, minutes: Int) -> AlarmTime {
+        return AlarmTime(ofDate: underlyingDateComponents.date!.advanced(by: hours.hour + minutes.minute))
     }
     
     /// The base date components used to initialize a `Weekday`.
@@ -58,7 +73,7 @@ extension AlarmTime {
     var minute: Int {
         underlyingDateComponents.minute!
     }
-    var description: String {
+    var timeDescription: String {
         AlarmTime.dateFormatter.string(from: underlyingDateComponents.date!)
     }
     private var date: Date {
@@ -92,7 +107,42 @@ extension AlarmTime {
     }
 }
 
-extension AlarmTime: CustomStringConvertible {}
+// MARK: - Protocol conformance
+
+extension AlarmTime: CustomStringConvertible {
+    var description: String {
+        "\(self.day) \(self.timeDescription)"
+    }
+}
 
 extension AlarmTime: Equatable, Codable {}
 
+extension AlarmTime: Comparable {
+    static func < (lhs: AlarmTime, rhs: AlarmTime) -> Bool {
+        if (lhs.day < rhs.day) {
+            return true
+        } else if (lhs.day == rhs.day) {
+            if (lhs.hour < rhs.hour) {
+                return true
+            } else if (lhs.hour == rhs.hour) {
+                return lhs.minute < rhs.minute
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+}
+
+extension Int {
+    var minute: TimeInterval {
+        return TimeInterval(self * 60)
+    }
+    var hour: TimeInterval {
+        return TimeInterval(self.minute * 60)
+    }
+    var day: TimeInterval {
+        return TimeInterval(self.hour * 24)
+    }
+}

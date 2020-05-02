@@ -21,13 +21,14 @@
 		F692728D2453B4920070B91D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F692728C2453B4920070B91D /* Preview Assets.xcassets */; };
 		F69272A42453BCA60070B91D /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A32453BCA60070B91D /* UserData.swift */; };
 		F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A72453BDF40070B91D /* AlarmTime.swift */; };
-		F69272AA2453C1800070B91D /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69272A92453C1800070B91D /* UserState.swift */; };
 		F69273D52455662F0070B91D /* AlarmList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273D42455662F0070B91D /* AlarmList.swift */; };
 		F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273D624556B1C0070B91D /* AlarmCard.swift */; };
 		F69273D924556D6F0070B91D /* Weekday.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273D824556D6F0070B91D /* Weekday.swift */; };
 		F69273DC2456477E0070B91D /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273DB2456477E0070B91D /* Color+Helpers.swift */; };
 		F69273DE24569A320070B91D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273DD24569A320070B91D /* Alarm.swift */; };
-		F69273EE245815C70070B91D /* SystemTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273ED245815C70070B91D /* SystemTime.swift */; };
+		F69273EE245815C70070B91D /* SystemClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273ED245815C70070B91D /* SystemClock.swift */; };
+		F69273F4245AE19E0070B91D /* Array+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273F3245AE19E0070B91D /* Array+Helpers.swift */; };
+		F69273FA245BBF720070B91D /* Models+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273F9245BBF720070B91D /* Models+Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,13 +92,14 @@
 		F692728F2453B4920070B91D /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		F69272A32453BCA60070B91D /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		F69272A72453BDF40070B91D /* AlarmTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTime.swift; sourceTree = "<group>"; };
-		F69272A92453C1800070B91D /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		F69273D42455662F0070B91D /* AlarmList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmList.swift; sourceTree = "<group>"; };
 		F69273D624556B1C0070B91D /* AlarmCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmCard.swift; sourceTree = "<group>"; };
 		F69273D824556D6F0070B91D /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
 		F69273DB2456477E0070B91D /* Color+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Helpers.swift"; sourceTree = "<group>"; };
 		F69273DD24569A320070B91D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
-		F69273ED245815C70070B91D /* SystemTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemTime.swift; sourceTree = "<group>"; };
+		F69273ED245815C70070B91D /* SystemClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClock.swift; sourceTree = "<group>"; };
+		F69273F3245AE19E0070B91D /* Array+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Helpers.swift"; sourceTree = "<group>"; };
+		F69273F9245BBF720070B91D /* Models+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models+Helpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,9 +187,8 @@
 		F69272A02453B5B50070B91D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F69273ED245815C70070B91D /* SystemTime.swift */,
+				F69273ED245815C70070B91D /* SystemClock.swift */,
 				F69272A32453BCA60070B91D /* UserData.swift */,
-				F69272A92453C1800070B91D /* UserState.swift */,
 				F69273DD24569A320070B91D /* Alarm.swift */,
 				F69272A72453BDF40070B91D /* AlarmTime.swift */,
 				F69273D824556D6F0070B91D /* Weekday.swift */,
@@ -217,7 +218,9 @@
 		F69273DA245647480070B91D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F69273F9245BBF720070B91D /* Models+Helpers.swift */,
 				F69273DB2456477E0070B91D /* Color+Helpers.swift */,
+				F69273F3245AE19E0070B91D /* Array+Helpers.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -350,17 +353,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F69273FA245BBF720070B91D /* Models+Helpers.swift in Sources */,
 				F69272802453B4920070B91D /* HostingController.swift in Sources */,
 				F692727E2453B4920070B91D /* ContentView.swift in Sources */,
 				F69272A42453BCA60070B91D /* UserData.swift in Sources */,
 				F69273DC2456477E0070B91D /* Color+Helpers.swift in Sources */,
 				F69272842453B4920070B91D /* NotificationController.swift in Sources */,
-				F69273EE245815C70070B91D /* SystemTime.swift in Sources */,
+				F69273EE245815C70070B91D /* SystemClock.swift in Sources */,
 				F69273DE24569A320070B91D /* Alarm.swift in Sources */,
 				F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */,
 				F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */,
-				F69272AA2453C1800070B91D /* UserState.swift in Sources */,
 				F69273D924556D6F0070B91D /* Weekday.swift in Sources */,
+				F69273F4245AE19E0070B91D /* Array+Helpers.swift in Sources */,
 				F69273D52455662F0070B91D /* AlarmList.swift in Sources */,
 				F69272822453B4920070B91D /* ExtensionDelegate.swift in Sources */,
 				F69272862453B4920070B91D /* NotificationView.swift in Sources */,

@@ -8,15 +8,37 @@
 
 import Foundation
 
+enum ScheduleState {
+    case ringing, scheduled, scheduledAndMuted, inactive
+}
+
 /// Represents an alarm for a day.
 struct Alarm: Identifiable {
     var id = UUID()
     var isOn: Bool
     var isMuted: Bool
+    var isAwakeConfirmed: Bool
+    /// Indicates the final alarm time of the alarm. If alarm is off, `finalAlarmTime` indicates the day on which it is set.
     var finalAlarmTime: AlarmTime
-    var snoozeState: SnoozeState
     var departureTime: AlarmTime
+    var snoozeState: SnoozeState
     var sleepReminderState: SleepReminderState
+    
+    /// Indicates the start and end alarm time for the alarm.
+    var alarmInterval: (start: AlarmTime, end: AlarmTime) {
+        guard isOn else { return (finalAlarmTime.startOfDay, finalAlarmTime.startOfDay) }
+        
+        if isMuted {
+            return (finalAlarmTime, finalAlarmTime)
+        } else {
+            switch snoozeState {
+            case .off:
+                return (finalAlarmTime, finalAlarmTime)
+            case .duration(minutes: let minutes):
+                return (finalAlarmTime.advancedBy(minutes: -minutes), finalAlarmTime)
+            }
+        }
+    }
     
     /// Initializes a default alarm.
     /// - Parameters:
@@ -24,16 +46,18 @@ struct Alarm: Identifiable {
         // FIXME: These needs change
         self.isOn = isOn
         self.isMuted = false
+        self.isAwakeConfirmed = true
         self.finalAlarmTime = finalAlarmTime
         self.snoozeState = .off
         self.departureTime = finalAlarmTime
         self.sleepReminderState = .off
     }
     
-    static func firstTimeAlarms(for weekday: Weekday) -> [Alarm] {
+    /// A sample array of alarms sorted by `alarmInterval`'s `start` time. Begins with sunday and ending at saturday.
+    static let sampleAlarms: [Alarm] = {
         var alarms = [Alarm]()
-        for offset in -1...5 {
-            let day = weekday.offSet(by: offset)
+        for offset in 0 ..< 7 {
+            let day = Weekday.sunday.offSet(by: offset)
             var alarm = Alarm(isOn: (day == .saturday || day == .sunday) ? false : true, finalAlarmTime: AlarmTime(day: day, hour: 10, minute: 09))
             if offset == 3 {
                 alarm.isMuted = true
@@ -41,11 +65,12 @@ struct Alarm: Identifiable {
             alarms.append(alarm)
         }
         return alarms
-    }
+    }()
 }
 
 enum SnoozeState {
     case off
+    // minutes should be between 0 and 60.
     case duration(minutes: Int)
 }
 
@@ -70,7 +95,7 @@ extension Alarm {
             if self.isMuted {
                 return mutedDescription
             } else {
-                return finalAlarmTime.description
+                return finalAlarmTime.timeDescription
             }
         } else {
             return offDescription
@@ -88,21 +113,39 @@ extension Alarm {
             return "zzz"
         }
     }
-}
-
-// MARK: - Equatable
-
-extension Alarm: Equatable {
-    static func ==(lhs: Alarm, rhs: Alarm) -> Bool {
-        return lhs.id == rhs.id
+    
+    var scheduleState: ScheduleState {
+        if !self.isOn {
+            return .inactive
+        } else if self.isMuted {
+            return .scheduledAndMuted
+        } else if !self.isAwakeConfirmed {
+            return .ringing
+        } else {
+            return .scheduled
+        }
     }
 }
+
+// MARK: - Protocol conformance
+
+extension Alarm: CustomStringConvertible {
+    var description: String {
+        return "\(self.day) \(self.timeDescription) isAwakeConfirmed: \(self.isAwakeConfirmed)"
+    }
+}
+
+extension Alarm: Equatable {}
 
 extension SnoozeState: Equatable {}
 
 extension SleepReminderState: Equatable {}
 
-// MARK: - Codable
+extension Alarm: Comparable {
+    static func <(lhs: Alarm, rhs: Alarm) -> Bool {
+        return lhs.alarmInterval.start < rhs.alarmInterval.start
+    }
+}
 
 extension SnoozeState: Codable {
     enum CodingKeys: String, CodingKey {

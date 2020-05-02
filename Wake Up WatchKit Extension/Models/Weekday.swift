@@ -8,11 +8,12 @@
 
 import Foundation
 
+/// Represents a day in a week from sunday through saturday.
 enum Weekday: Int, CaseIterable {
     case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
     
     func offSet(by offset: Int) -> Weekday {
-        let effectiveOffset = offset % Weekday.allCases.count
+        let effectiveOffset = abs(offset) % Weekday.allCases.count * offset.signum()
         let value = ((self.rawValue + effectiveOffset + Weekday.allCases.count) - 1) % Weekday.allCases.count + 1
         guard value >= 1 && value <= 7 else { fatalError("Cannot initialize weekday with raw value \(value)") }
         return Weekday(rawValue: value)!
@@ -46,4 +47,12 @@ extension Weekday {
     }
 }
 
+// MARK: - Protocol conformance
+
 extension Weekday: Equatable, Codable {}
+
+extension Weekday: Comparable {
+    static func <(lhs: Weekday, rhs: Weekday) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+}
