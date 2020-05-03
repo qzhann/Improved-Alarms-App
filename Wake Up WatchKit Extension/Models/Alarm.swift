@@ -59,7 +59,7 @@ struct Alarm: Identifiable {
         for offset in 0 ..< 7 {
             let day = Weekday.sunday.offSet(by: offset)
             var alarm = Alarm(isOn: (day == .saturday || day == .sunday) ? false : true, finalAlarmTime: AlarmTime(day: day, hour: 10, minute: 09))
-            if offset == 3 {
+            if day == .wednesday {
                 alarm.isMuted = true
             }
             alarms.append(alarm)

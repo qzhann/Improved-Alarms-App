@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-var testUserData = UserData(alarms: Alarm.sampleAlarms)
+var testUserData = UserData(alarms: Alarm.sampleAlarms, nextAlarmDay: .friday)
 
 final class UserData: ObservableObject {
     @Published var alarms: [Alarm] {
@@ -45,6 +45,11 @@ final class UserData: ObservableObject {
             .sink { currentTime in
                 self.reorderAlarms(using: currentTime)
             }
+    }
+    
+    convenience init(alarms: [Alarm], nextAlarmDay: Weekday) {
+        let initialDate = alarms.first(where: { $0.day == nextAlarmDay })!.alarmInterval.start.advancedBy(minutes: -5).date
+        self.init(alarms: alarms, systemClock: SystemClock.nonUpdatingClock(initialDate: initialDate), mostRecentReorderDate: initialDate)
     }
     
     // Cleans up memory

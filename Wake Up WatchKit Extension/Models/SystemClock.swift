@@ -48,6 +48,10 @@ class SystemClock {
         RunLoop.current.add(timer!, forMode: .common)
     }
     
+    static func nonUpdatingClock(initialDate: Date) -> SystemClock {
+        return SystemClock(incrementInterval: TimeInterval.infinity, increment: 0, initialDate: initialDate)
+    }
+    
     // Cleans up memory
     deinit {
         self.timer?.invalidate()

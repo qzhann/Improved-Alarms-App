@@ -10,7 +10,7 @@ import Foundation
 
 /// An encapsulation of time.
 struct AlarmTime {
-    var underlyingDateComponents: DateComponents
+    private var underlyingDateComponents: DateComponents
     
     /// Initializes an `AlarmTime` by specifying day, hour, and minute.
     init(day: Weekday, hour: Int, minute: Int) {
@@ -76,7 +76,7 @@ extension AlarmTime {
     var timeDescription: String {
         AlarmTime.dateFormatter.string(from: underlyingDateComponents.date!)
     }
-    private var date: Date {
+    var date: Date {
         underlyingDateComponents.date!
     }
     /// Generates an array of alarm time with range [`start`, `end`), each element is `stride` minutes later than the previous element in the array.
