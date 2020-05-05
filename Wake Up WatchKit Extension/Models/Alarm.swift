@@ -114,15 +114,23 @@ extension Alarm {
         }
     }
     
-    var scheduleState: ScheduleState {
+    func scheduleState(in userData: UserData) -> ScheduleState {
         if !self.isOn {
             return .inactive
-        } else if self.isMuted {
-            return .scheduledAndMuted
-        } else if !self.isAwakeConfirmed {
-            return .ringing
         } else {
-            return .scheduled
+            if self == userData.alarms[0] {
+                if !self.isAwakeConfirmed {
+                    return .ringing
+                } else {
+                    return .inactive
+                }
+            } else {
+                if self.isMuted {
+                    return .scheduledAndMuted
+                } else {
+                    return .scheduled
+                }
+            }
         }
     }
 }

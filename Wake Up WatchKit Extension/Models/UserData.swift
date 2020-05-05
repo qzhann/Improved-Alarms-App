@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-var testUserData = UserData(alarms: Alarm.sampleAlarms, nextAlarmDay: .friday)
+var testUserData = UserData(alarms: Alarm.sampleAlarms, isAwakeConfirmed: false, nextAlarmDay: .friday)
 
 final class UserData: ObservableObject {
     @Published var alarms: [Alarm] {
@@ -26,7 +26,11 @@ final class UserData: ObservableObject {
     var alarmTimeUpdateCancellable: AnyCancellable?
     
     var nextAlarm: Alarm {
-        alarms[1]
+        if alarms[0].isOn && !alarms[0].isMuted && !alarms[0].isAwakeConfirmed {
+            return alarms[0]
+        } else {
+            return alarms[1]
+        }
     }
     
     /// Initializes a `UserData` by specifying alarms, systemClock, and lastUpdateDate.
@@ -47,9 +51,11 @@ final class UserData: ObservableObject {
             }
     }
     
-    convenience init(alarms: [Alarm], nextAlarmDay: Weekday) {
+    /// Initializes a `UserData` by specifying alarms, the isAwakeConfirmed status for the 0th day, and the alarm that will appear for the next day.
+    convenience init(alarms: [Alarm], isAwakeConfirmed: Bool, nextAlarmDay: Weekday) {
         let initialDate = alarms.first(where: { $0.day == nextAlarmDay })!.alarmInterval.start.advancedBy(minutes: -5).date
         self.init(alarms: alarms, systemClock: SystemClock.nonUpdatingClock(initialDate: initialDate), mostRecentReorderDate: initialDate)
+        self.alarms[0].isAwakeConfirmed = isAwakeConfirmed
     }
     
     // Cleans up memory
@@ -75,9 +81,14 @@ final class UserData: ObservableObject {
             self.mostRecentReorderDate = Calendar.autoupdatingCurrent.startOfDay(for: systemClock.currentDate)
             
             self.alarms = newAlarms
-        }
-        
-        // TODO: Try rotate the array to make the "ringing" alarm as the "next alarm" if the 0th alarm is not awake confirmed yet AND is on.
+        }        
+    }
+    
+    /// Sets `isAwakeConfirmed` for alarm to true.
+    /// - Parameter alarm: The `Alarm` instance that needs to confirm awake.
+    func confirmAwake(for alarm: Alarm) {
+        guard let alarmIndex = self.alarms.firstIndex(of: alarm) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].isAwakeConfirmed = true
     }
 }
 

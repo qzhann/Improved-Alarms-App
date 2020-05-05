@@ -14,6 +14,13 @@ struct AlarmList: View {
         List {
             ForEach(userData.alarms) { alarm in
                 AlarmCard(alarm: alarm)
+                .listRowActionButton(action: {}) {
+                    Image(systemName: "bell.slash.fill")
+                        .font(.system(size: 33, weight: .medium))
+                        .foregroundColor(.secondaryTextColor(for: Alarm.sampleAlarms[1], in: testUserData))
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .background(Color.gray)
+                }
             }
         }
         .navigationBarTitle(Text("Alarms"))

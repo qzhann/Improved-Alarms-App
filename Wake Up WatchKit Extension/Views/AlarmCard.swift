@@ -19,6 +19,7 @@ struct AlarmCard: View {
                 // basic card
                 VStack(alignment: .leading, spacing: -4) {
                     
+                    // top half of the card
                     HStack {
                         // day text
                         Text(alarm.day.abbreviation)
@@ -33,17 +34,29 @@ struct AlarmCard: View {
                             NextBadge(for: alarm, in: userData)
                         }
                     }
+                    .padding(.top, -6)
                     
+                    // bottom half of the card
                     HStack(spacing: -4) {
-                        // alarm state image
-                        Image(systemName: alarm.stateImageName)
-                            .font(Font.system(size: 26, weight: .medium))
-                            .padding()
+                        if alarm.isAwakeConfirmed {
+                            // alarm state image
+                            Image(systemName: alarm.stateImageName)
+                                .font(Font.system(size: 26, weight: .medium))
+                                .padding()
+                            
+                            // time text
+                            Text(alarm.timeDescription)
+                                .font(Font.system(size: 24, weight: .bold))
+                                .padding()
+                        } else {
+                            // confirm awake button
+                            ConfirmAwakeButton(alarm: alarm, userData: userData)
+                                .offset(x: 5, y: 0)
+                                .onTapGesture {
+                                    self.confirmAwake(for: self.alarm)
+                                }
+                        }
                         
-                        // time text
-                        Text(alarm.timeDescription)
-                            .font(Font.system(size: 24, weight: .bold))
-                            .padding()
                     }
                     .foregroundColor(.secondaryTextColor(for: alarm, in: userData))
                 }
@@ -52,8 +65,12 @@ struct AlarmCard: View {
             }
         }
         .frame(height: 100)
-        .listRowPlatterColor(.listRowPlatterColor(for: alarm, in: userData))
+        .listRowBackgroundColor(.listRowPlatterColor(for: alarm, in: userData))
 
+    }
+    
+    func confirmAwake(for alarm: Alarm) {
+        self.userData.confirmAwake(for: alarm)
     }
 }
 
@@ -75,6 +92,25 @@ struct NextBadge: View {
             .background(Color.primaryTextColor(for: alarm, in: userData))
             .cornerRadius(4)
             .offset(x: 8)
+    }
+}
+
+struct ConfirmAwakeButton: View {
+    let alarm: Alarm
+    let userData: UserData
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "bell.slash.fill")
+                .font(Font.system(size: 22, weight: .medium))
+            Text("Confirm awake")
+                .font(Font.system(size: 17, weight: .semibold))
+                .fixedSize()
+        }
+        .padding()
+        .background(Color.listRowPlatterColor(for: alarm, in: userData))
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(0.5), radius: 10, x: 0, y: 0)
     }
 }
 
