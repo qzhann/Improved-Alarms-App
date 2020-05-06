@@ -135,7 +135,7 @@ extension Alarm {
     }
 }
 
-// MARK: - Protocol conformance
+// MARK: - Basic behavior protocols
 
 extension Alarm: CustomStringConvertible {
     var description: String {

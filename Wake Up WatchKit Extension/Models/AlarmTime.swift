@@ -107,7 +107,7 @@ extension AlarmTime {
     }
 }
 
-// MARK: - Protocol conformance
+// MARK: - Basic behavior protocols
 
 extension AlarmTime: CustomStringConvertible {
     var description: String {

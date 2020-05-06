@@ -92,7 +92,7 @@ final class UserData: ObservableObject {
     }
 }
 
-// MARK: - Protocol conformance
+// MARK: - Basic behavior protocols
 
 extension UserData: Equatable {
     static func == (lhs: UserData, rhs: UserData) -> Bool {

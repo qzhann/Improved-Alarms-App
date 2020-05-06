@@ -47,7 +47,7 @@ extension Weekday {
     }
 }
 
-// MARK: - Protocol conformance
+// MARK: - Basic behavior protocols
 
 extension Weekday: Equatable, Codable {}
 
