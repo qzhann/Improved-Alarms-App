@@ -54,6 +54,10 @@ struct ListRowActionModifier<ActionContent: View>: ViewModifier {
 
 extension View {
     /// A custom modifier which adds a row action behavior.
+    /// - Parameters:
+    ///   - action: The action to perform when `viewContent` is tapped.
+    ///   - selectionManager: The row action selection manager used to manage row action selection exclusivity. Defaults to the `RowActionSelectionManager.shared`.
+    ///   - viewContent: The view content being displayed as the row action.
     func listRowActionButton<ViewContent: View>(action: @escaping () -> Void, selectionManager: RowActionSelectionManager = RowActionSelectionManager.shared, viewContent: () -> ViewContent) -> some View {
         self.modifier(ListRowActionModifier(action: action, selectionManager: selectionManager, actionContent: viewContent()))
     }
