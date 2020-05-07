@@ -76,6 +76,16 @@ extension Color {
         }
     }
     
+    static func rowActionBackgroundColor(for alarm: Alarm, in userData: UserData) -> Color {
+        let sheduleState = alarm.scheduleState(in: userData)
+        switch sheduleState {
+        case .inactive, .scheduledAndMuted:
+            return .systemOrange
+        case .scheduled, .ringing:
+            return .systemGrey
+        }
+    }
+    
     static func primaryTextColor(for alarm: Alarm, in userData: UserData) -> Color {
         let sheduleState = alarm.scheduleState(in: userData)
         switch sheduleState {
@@ -95,6 +105,7 @@ extension Color {
             return .systemTextGrey
         }
     }
+    
 }
 
 struct ColorsPreview: PreviewProvider {

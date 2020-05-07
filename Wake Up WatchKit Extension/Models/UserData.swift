@@ -90,6 +90,11 @@ final class UserData: ObservableObject {
         guard let alarmIndex = self.alarms.firstIndex(of: alarm) else { fatalError("Cannot find alarm") }
         self.alarms[alarmIndex].isAwakeConfirmed = true
     }
+    
+    func toggleMuted(for alarm: Alarm) {
+        guard let alarmIndex = self.alarms.firstIndex(of: alarm) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].isMuted.toggle()
+    }
 }
 
 // MARK: - Basic behavior protocols

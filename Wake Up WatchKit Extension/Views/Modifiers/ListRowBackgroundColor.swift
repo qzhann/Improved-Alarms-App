@@ -25,24 +25,3 @@ extension View {
         .listRowPlatterColor(.clear)
     }
 }
-
-struct ListRowBackgroundColor_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            List {
-                AlarmCard(alarm: testUserData.alarms[0])
-                    .listRowBackgroundColor(.orange)
-                AlarmCard(alarm: testUserData.alarms[1])
-                    .listRowBackgroundColor(.orange)
-            }
-            .previewDisplayName("Custom Modifier")
-            
-            List {
-                AlarmCard(alarm: testUserData.alarms[1])
-                    .listRowPlatterColor(.orange)
-            }
-            .previewDisplayName("System Modifier")
-        }
-        .environmentObject(testUserData)
-    }
-}

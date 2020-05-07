@@ -13,6 +13,24 @@ struct AlarmCard: View {
     var alarm: Alarm
     
     var body: some View {
+        Group {
+            if alarm.isOn && alarm.isAwakeConfirmed {
+                rowContent
+                .listRowActionButton(action: { self.toggleMuted(for: self.alarm) }) {
+                    Image(systemName: alarm.rowActionImageName(in: userData))
+                        .font(.system(size: 33, weight: .medium))
+                        .foregroundColor(.white)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                        .background(Color.rowActionBackgroundColor(for: alarm, in: userData))
+                }
+            } else {
+                rowContent
+            }
+        }
+        .padding(0)
+    }
+    
+    var rowContent: some View {
         ZStack(alignment: .topTrailing) {
             // spacing
             HStack {
@@ -26,6 +44,7 @@ struct AlarmCard: View {
                             .foregroundColor(.primaryTextColor(for: alarm, in: userData))
                             .font(Font.system(size: 30, weight: .semibold))
                             .padding()
+                            .padding(.leading, 3)
                         
                         Spacer()
                         
@@ -35,6 +54,7 @@ struct AlarmCard: View {
                         }
                     }
                     .padding(.top, -6)
+                    .padding(.trailing, 4)
                     
                     // bottom half of the card
                     HStack(spacing: -4) {
@@ -48,6 +68,7 @@ struct AlarmCard: View {
                             Text(alarm.timeDescription)
                                 .font(Font.system(size: 24, weight: .bold))
                                 .padding()
+                                .animation(nil)
                         } else {
                             // confirm awake button
                             ConfirmAwakeButton(alarm: alarm, userData: userData)
@@ -58,6 +79,7 @@ struct AlarmCard: View {
                         }
                         
                     }
+                    .frame(height: 40)
                     .foregroundColor(.secondaryTextColor(for: alarm, in: userData))
                 }
                 .padding([.top, .leading], -4)
@@ -66,11 +88,14 @@ struct AlarmCard: View {
         }
         .frame(height: 100)
         .listRowBackgroundColor(.listRowPlatterColor(for: alarm, in: userData))
-
     }
     
     func confirmAwake(for alarm: Alarm) {
         self.userData.confirmAwake(for: alarm)
+    }
+    
+    func toggleMuted(for alarm: Alarm) {
+        self.userData.toggleMuted(for: alarm)
     }
 }
 

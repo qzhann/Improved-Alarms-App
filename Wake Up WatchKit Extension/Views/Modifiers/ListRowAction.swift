@@ -33,6 +33,7 @@ struct ListRowActionModifier<ActionContent: View>: ViewModifier {
                     
                     actionContent
                         .brightness(self.translationState.brightnessFactor)
+                        .saturation(self.translationState.saturationFactor)
                         .animation(Animation.linear(duration: 0.15))
                         // uses an linear animation here so that the brightness changes more dramatically than the scale effect. Provides user with more direct feedback that the swipe would soon cover up / reveal the row actions.
                         
@@ -66,15 +67,8 @@ extension View {
 struct ListRowAction_Previews: PreviewProvider {
     static var previews: some View {
         List {
+            // The list row action has already been applied in the AlarmCard instance
             AlarmCard(alarm: Alarm.sampleAlarms[1])
-                .listRowBackgroundColor(Color.orange)
-                .listRowActionButton(action: { print("action button tapped") }) {
-                    Image(systemName: "bell.slash.fill")
-                        .font(.system(size: 33, weight: .medium))
-                        .foregroundColor(.secondaryTextColor(for: Alarm.sampleAlarms[1], in: testUserData))
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                        .background(Color.gray)
-                }
                 
         }
         .environmentObject(testUserData)

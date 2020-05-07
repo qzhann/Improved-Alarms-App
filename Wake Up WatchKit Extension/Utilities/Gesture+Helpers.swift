@@ -138,8 +138,12 @@ class TranslationState: ObservableObject {
     }
     var brightnessFactor: Double {
         let factor: CGFloat = 0.5
-        let returnValue = -factor + (1 - factor) * offsetFactor
-                                .clamped(min: 0, max: 1)
+        let returnValue = -factor + (1 - factor) * offsetFactor.clamped(min: 0, max: 1)
+        return Double(returnValue)
+    }
+    var saturationFactor: Double {
+        let factor: CGFloat = 0.1
+        let returnValue = factor + (1 - factor) * offsetFactor.clamped(min: 0, max: 1)
         return Double(returnValue)
     }
 }
