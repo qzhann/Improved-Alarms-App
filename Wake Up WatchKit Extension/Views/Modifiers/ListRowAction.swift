@@ -11,14 +11,22 @@ import SwiftUI
 struct ListRowActionModifier<ActionContent: View>: ViewModifier {
     let action: () -> Void
     let actionContent: ActionContent
+    weak var selectionManager: RowActionSelectionManager?
     
-    @State fileprivate var translationState = TranslationState(trailingActionEndPosition: -(screenWidth / 2) - 1)
+    @ObservedObject var translationState = TranslationState(trailingActionEndPosition: -(screenWidth / 2) - 1)
+    
+    init(action: @escaping () -> Void, selectionManager: RowActionSelectionManager, actionContent: ActionContent) {
+        self.action = action
+        self.actionContent = actionContent
+        self.selectionManager = selectionManager
+        selectionManager.managedSelections.append(translationState)
+    }
     
     func body(content: Content) -> some View {
         content
             .offset(x: self.translationState.totalOffset, y: 0)
             .animation(Animation.interactiveSpring())
-            .gesture(DragGesture.rowActionDragGesture($translationState))
+            .gesture(DragGesture.rowActionDragGesture(translationState, selectionManager: selectionManager))
             .background(
                 HStack {
                     Spacer()
@@ -46,8 +54,8 @@ struct ListRowActionModifier<ActionContent: View>: ViewModifier {
 
 extension View {
     /// A custom modifier which adds a row action behavior.
-    func listRowActionButton<ViewContent: View>(action: @escaping () -> Void, viewContent: () -> ViewContent) -> some View {
-        self.modifier(ListRowActionModifier(action: action, actionContent: viewContent()))
+    func listRowActionButton<ViewContent: View>(action: @escaping () -> Void, selectionManager: RowActionSelectionManager = RowActionSelectionManager.shared, viewContent: () -> ViewContent) -> some View {
+        self.modifier(ListRowActionModifier(action: action, selectionManager: selectionManager, actionContent: viewContent()))
     }
 }
 

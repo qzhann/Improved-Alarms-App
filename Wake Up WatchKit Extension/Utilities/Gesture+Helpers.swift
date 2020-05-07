@@ -10,67 +10,66 @@ import SwiftUI
 
 extension DragGesture {
     /// Returns a row action drag gesture that binds to a translation state.
-    static func rowActionDragGesture(_ translationState: Binding<TranslationState>) -> some Gesture {
-        let rowActionGesture = DragGesture(minimumDistance: 12.0, coordinateSpace: .local)
+    static func rowActionDragGesture(_ translationState: TranslationState, selectionManager: RowActionSelectionManager?) -> some Gesture {
+        let rowActionGesture = DragGesture(minimumDistance: 16.0, coordinateSpace: .local)
         .onChanged { (value) in
+            selectionManager?.currentSelection = translationState
             let translation = value.location.x - value.startLocation.x
-            var currentState = translationState.wrappedValue
-            if currentState.totalOffset > currentState.defaultPosition {  // over the default position, scrub with interpolation
-                switch currentState.positionState {
+            if translationState.totalOffset > translationState.defaultPosition {  // over the default position, scrub with interpolation
+                switch translationState.positionState {
                 case .default:
-                    currentState.translation = translation / 4
+                    translationState.translation = translation / 4
                 case .showingTrailingAction:
-                    currentState.translation = abs(currentState.trailingActionEndPosition - currentState.defaultPosition) + (translation - abs(currentState.trailingActionEndPosition)) / 4
+                    translationState.translation = abs(translationState.trailingActionEndPosition - translationState.defaultPosition) + (translation - abs(translationState.trailingActionEndPosition)) / 4
                 case .showingLeadingAction:
                     fatalError("Did not implement showing leading action")
                 }
-            } else if currentState.totalOffset < currentState.trailingActionEndPosition {  // Went over the trailing action end position, scrub with interpolation
-                switch currentState.positionState {
+            } else if translationState.totalOffset < translationState.trailingActionEndPosition {  // Went over the trailing action end position, scrub with interpolation
+                switch translationState.positionState {
                 case .default:
-                    currentState.translation = currentState.trailingActionEndPosition + (translation - currentState.trailingActionEndPosition) / 4
+                    translationState.translation = translationState.trailingActionEndPosition + (translation - translationState.trailingActionEndPosition) / 4
                 case .showingTrailingAction:
-                    currentState.translation = translation / 4
+                    translationState.translation = translation / 4
                 case .showingLeadingAction:
                     fatalError("Did not implement showing leading action")
                 }
             } else {    // In the middle, scrub linearly
-                currentState.translation = translation
+                translationState.translation = translation
             }
-            translationState.wrappedValue = currentState
             
         }
         .onEnded { (value) in
             let translation = value.location.x - value.startLocation.x
-            let finalPosition = translation + translationState.wrappedValue.stablePosition
-            var currentState = translationState.wrappedValue
+            let finalPosition = translation + translationState.stablePosition
 
-            if finalPosition > currentState.defaultPosition {  // Over default position
-                currentState.positionState = .default
-            } else if finalPosition < currentState.trailingActionEndPosition {   // Over the trailing action end position
-                currentState.positionState = .showingTrailingAction
+            if finalPosition > translationState.defaultPosition {  // Over default position
+                translationState.positionState = .default
+                selectionManager?.currentSelection = nil
+            } else if finalPosition < translationState.trailingActionEndPosition {   // Over the trailing action end position
+                translationState.positionState = .showingTrailingAction
             } else {
                 let triggerFactor: CGFloat = 0.3
-                let trailingActionStateChangeThreashold = abs(currentState.defaultPosition - currentState.trailingActionEndPosition) * triggerFactor
+                let trailingActionStateChangeThreashold = abs(translationState.defaultPosition - translationState.trailingActionEndPosition) * triggerFactor
                 // Between default position and trailing action end position
-                switch currentState.positionState {
+                switch translationState.positionState {
                 case .default:
                     if abs(translation) > trailingActionStateChangeThreashold {
-                        currentState.positionState = .showingTrailingAction
+                        translationState.positionState = .showingTrailingAction
                     } else {
-                        currentState.positionState = .default
+                        translationState.positionState = .default
+                        selectionManager?.currentSelection = nil
                     }
                 case .showingTrailingAction:
                     if abs(translation) > trailingActionStateChangeThreashold {
-                        currentState.positionState = .default
+                        translationState.positionState = .default
+                        selectionManager?.currentSelection = nil
                     } else {
-                        currentState.positionState = .showingTrailingAction
+                        translationState.positionState = .showingTrailingAction
                     }
                 case .showingLeadingAction:
                     fatalError("Did not implement showing leading action")
                 }
-                
             }
-            translationState.wrappedValue = currentState
             
         }
         
@@ -78,19 +77,16 @@ extension DragGesture {
     }
 }
 
-/// Represents the state of the translation induced by the drag gesture.
-struct TranslationState {
+/// Represents the state of the translation induced by the drag gesture. Uses a class instead of a struct so that the selection manager could use translation state to keep track of the row action states.
+class TranslationState: ObservableObject {
     var id: UUID
+    @Published var totalOffset: CGFloat = 0.0
     
+    /// Repersents the current position of the row.
     enum PositionState {
         case `default`
         case showingTrailingAction
         case showingLeadingAction
-    }
-    
-    init(trailingActionEndPosition: CGFloat) {
-        self.trailingActionEndPosition = trailingActionEndPosition
-        self.id = UUID()
     }
     
     private var _positionState: PositionState = .default
@@ -108,18 +104,29 @@ struct TranslationState {
                 self.translation = 0
                 self.stablePosition = self.trailingActionEndPosition
             case .showingLeadingAction:
-                fatalError("Did not implement offTrailingEdge yet.")
+                fatalError("Did not implement showingLeadingAction yet.")
             }
         }
     }
-    var translation: CGFloat = 0.0
-    var stablePosition: CGFloat = 0.0
+    
     var defaultPosition: CGFloat = 0.0
     var trailingActionEndPosition: CGFloat
-    
-    var totalOffset: CGFloat {
-        return translation + stablePosition
+    var translation: CGFloat = 0.0 {
+        didSet {
+            totalOffset = translation + stablePosition
+        }
     }
+    var stablePosition: CGFloat = 0.0 {
+        didSet {
+            totalOffset = translation + stablePosition
+        }
+    }
+    
+    init(trailingActionEndPosition: CGFloat) {
+        self.id = UUID()
+        self.trailingActionEndPosition = trailingActionEndPosition
+    }
+    
     var offsetFactor: CGFloat {
         return totalOffset / (trailingActionEndPosition - defaultPosition)
     }
@@ -134,5 +141,17 @@ struct TranslationState {
         let returnValue = -factor + (1 - factor) * offsetFactor
                                 .clamped(min: 0, max: 1)
         return Double(returnValue)
+    }
+}
+
+extension TranslationState: Deselectable {
+    func deselect() {
+        positionState = .default
+    }
+}
+
+extension TranslationState: Equatable {
+    static func == (lhs: TranslationState, rhs: TranslationState) -> Bool {
+        return lhs.id == rhs.id
     }
 }
