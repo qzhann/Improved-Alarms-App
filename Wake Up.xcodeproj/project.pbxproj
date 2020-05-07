@@ -29,7 +29,8 @@
 		F69273EE245815C70070B91D /* SystemClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273ED245815C70070B91D /* SystemClock.swift */; };
 		F69273F4245AE19E0070B91D /* Array+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273F3245AE19E0070B91D /* Array+Helpers.swift */; };
 		F69273FA245BBF720070B91D /* Models+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273F9245BBF720070B91D /* Models+Helpers.swift */; };
-		F69E376E2462460D00F6D7B1 /* ViewModel+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376D2462460D00F6D7B1 /* ViewModel+Helpers.swift */; };
+		F69E376E2462460D00F6D7B1 /* Number+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */; };
+		F69E37702463B89A00F6D7B1 /* Gesture+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */; };
 		F6C130BA245EAC420095B0A4 /* ListRowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130B9245EAC420095B0A4 /* ListRowAction.swift */; };
 		F6C130BC245EB09D0095B0A4 /* ListRowBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */; };
 		F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */; };
@@ -104,7 +105,8 @@
 		F69273ED245815C70070B91D /* SystemClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemClock.swift; sourceTree = "<group>"; };
 		F69273F3245AE19E0070B91D /* Array+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Helpers.swift"; sourceTree = "<group>"; };
 		F69273F9245BBF720070B91D /* Models+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models+Helpers.swift"; sourceTree = "<group>"; };
-		F69E376D2462460D00F6D7B1 /* ViewModel+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModel+Helpers.swift"; sourceTree = "<group>"; };
+		F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+Helpers.swift"; sourceTree = "<group>"; };
+		F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Helpers.swift"; sourceTree = "<group>"; };
 		F6C130B9245EAC420095B0A4 /* ListRowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowAction.swift; sourceTree = "<group>"; };
 		F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowBackgroundColor.swift; sourceTree = "<group>"; };
 		F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Helpers.swift"; sourceTree = "<group>"; };
@@ -228,10 +230,11 @@
 			isa = PBXGroup;
 			children = (
 				F69273F9245BBF720070B91D /* Models+Helpers.swift */,
-				F69273DB2456477E0070B91D /* Color+Helpers.swift */,
 				F69273F3245AE19E0070B91D /* Array+Helpers.swift */,
+				F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */,
+				F69273DB2456477E0070B91D /* Color+Helpers.swift */,
 				F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */,
-				F69E376D2462460D00F6D7B1 /* ViewModel+Helpers.swift */,
+				F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -376,7 +379,7 @@
 				F6C130BC245EB09D0095B0A4 /* ListRowBackgroundColor.swift in Sources */,
 				F69273FA245BBF720070B91D /* Models+Helpers.swift in Sources */,
 				F69272802453B4920070B91D /* HostingController.swift in Sources */,
-				F69E376E2462460D00F6D7B1 /* ViewModel+Helpers.swift in Sources */,
+				F69E376E2462460D00F6D7B1 /* Number+Helpers.swift in Sources */,
 				F6C130BA245EAC420095B0A4 /* ListRowAction.swift in Sources */,
 				F692727E2453B4920070B91D /* ContentView.swift in Sources */,
 				F69272A42453BCA60070B91D /* UserData.swift in Sources */,
@@ -391,6 +394,7 @@
 				F69273F4245AE19E0070B91D /* Array+Helpers.swift in Sources */,
 				F69273D52455662F0070B91D /* AlarmList.swift in Sources */,
 				F69272822453B4920070B91D /* ExtensionDelegate.swift in Sources */,
+				F69E37702463B89A00F6D7B1 /* Gesture+Helpers.swift in Sources */,
 				F69272862453B4920070B91D /* NotificationView.swift in Sources */,
 				F69272882453B4920070B91D /* ComplicationController.swift in Sources */,
 			);
