@@ -76,12 +76,10 @@ extension Color {
         }
     }
     
-    static func rowActionBackgroundColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = alarm.scheduleState(in: userData)
-        switch sheduleState {
-        case .inactive, .scheduledAndMuted:
-            return .systemOrange
-        case .scheduled, .ringing:
+    static func rowActionBackgroundColor(for alarm: Alarm) -> Color {
+        if alarm.isMuted {
+            return .orange
+        } else {
             return .systemGrey
         }
     }

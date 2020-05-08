@@ -114,16 +114,13 @@ extension Alarm {
         }
     }
     
-    func rowActionImageName(in userData: UserData) -> String {
+    var rowActionImageName: String {
         guard self.isOn else { fatalError("Off alarms should not display row action image") }
 
-        switch scheduleState(in: userData) {
-        case .inactive, .scheduledAndMuted:
+        if isMuted {
             return "bell.fill"
-        case .scheduled:
+        } else {
             return "bell.slash.fill"
-        case .ringing:
-            fatalError("Off alarms should not display row action image")
         }
     }
     

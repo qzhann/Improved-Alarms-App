@@ -17,11 +17,17 @@ struct AlarmCard: View {
             if alarm.isOn && alarm.isAwakeConfirmed {
                 rowContent
                 .listRowActionButton(action: { self.toggleMuted(for: self.alarm) }) {
-                    Image(systemName: alarm.rowActionImageName(in: userData))
-                        .font(.system(size: 33, weight: .medium))
-                        .foregroundColor(.white)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                        .background(Color.rowActionBackgroundColor(for: alarm, in: userData))
+                    Group {
+                        if alarm.isMuted {
+                            RowActionView(alarm: alarm)
+                                .transition(.opacity)
+                                .animation(.linear(duration: 15))
+                                // using if-else with transition here so that the row action disappears when tapped instead of flickers to the new value
+                        } else {
+                            RowActionView(alarm: alarm)
+                        }
+                        
+                    }
                 }
             } else {
                 rowContent
@@ -62,13 +68,14 @@ struct AlarmCard: View {
                             // alarm state image
                             Image(systemName: alarm.stateImageName)
                                 .font(Font.system(size: 26, weight: .medium))
+                                .foregroundColor(alarm == userData.alarms[0] && !alarm.isMuted ? .systemOrange: .secondaryTextColor(for: alarm, in: userData))
                                 .padding()
                             
                             // time text
                             Text(alarm.timeDescription)
                                 .font(Font.system(size: 24, weight: .bold))
                                 .padding()
-                                .animation(nil)
+                                .animation(.interactiveSpring(response: 0))
                         } else {
                             // confirm awake button
                             ConfirmAwakeButton(alarm: alarm, userData: userData)
@@ -136,6 +143,23 @@ struct ConfirmAwakeButton: View {
         .background(Color.listRowPlatterColor(for: alarm, in: userData))
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.5), radius: 10, x: 0, y: 0)
+    }
+}
+
+struct RowActionView: View {
+    let alarm: Alarm
+    var body: some View {
+        Image(systemName: alarm.rowActionImageName)
+            .transition(.opacity)
+            .animation(.easeInOut(duration: 4))
+            
+            .font(.system(size: 33, weight: .medium))
+            .foregroundColor(.white)
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            .background(Color.rowActionBackgroundColor(for: alarm))
+            .transition(.opacity)
+            
+            .animation(.easeInOut(duration: 4))
     }
 }
 
