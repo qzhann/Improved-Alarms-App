@@ -10,8 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        AlarmList()
-            .environmentObject(testUserData)
+        ListRowStylePicker_Preview()
+//        AlarmList()
+//            .environmentObject(testUserData)
     }
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F61E4EC0246B872E00BF09FD /* ListRowStylePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61E4EBF246B872E00BF09FD /* ListRowStylePicker.swift */; };
 		F692726A2453B4900070B91D /* Wake Up WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F69272692453B4900070B91D /* Wake Up WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F69272702453B4900070B91D /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F692726E2453B4900070B91D /* Interface.storyboard */; };
 		F69272722453B4920070B91D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F69272712453B4920070B91D /* Assets.xcassets */; };
@@ -31,7 +32,9 @@
 		F69273FA245BBF720070B91D /* Models+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69273F9245BBF720070B91D /* Models+Helpers.swift */; };
 		F69E376E2462460D00F6D7B1 /* Number+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */; };
 		F69E37702463B89A00F6D7B1 /* Gesture+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */; };
-		F69E37722463F95400F6D7B1 /* SelectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E37712463F95400F6D7B1 /* SelectionManager.swift */; };
+		F69E37722463F95400F6D7B1 /* SelectionManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E37712463F95400F6D7B1 /* SelectionManaging.swift */; };
+		F69E37742465204700F6D7B1 /* AlarmSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E37732465204700F6D7B1 /* AlarmSetting.swift */; };
+		F69E377624653E7600F6D7B1 /* ActionStylePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E377524653E7600F6D7B1 /* ActionStylePicker.swift */; };
 		F6C130BA245EAC420095B0A4 /* ListRowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130B9245EAC420095B0A4 /* ListRowAction.swift */; };
 		F6C130BC245EB09D0095B0A4 /* ListRowBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */; };
 		F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */; };
@@ -80,6 +83,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F61E4EBF246B872E00BF09FD /* ListRowStylePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowStylePicker.swift; sourceTree = "<group>"; };
 		F69272652453B48F0070B91D /* Wake Up.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wake Up.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F69272692453B4900070B91D /* Wake Up WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wake Up WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F692726F2453B4900070B91D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -108,7 +112,9 @@
 		F69273F9245BBF720070B91D /* Models+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models+Helpers.swift"; sourceTree = "<group>"; };
 		F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+Helpers.swift"; sourceTree = "<group>"; };
 		F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Helpers.swift"; sourceTree = "<group>"; };
-		F69E37712463F95400F6D7B1 /* SelectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManager.swift; sourceTree = "<group>"; };
+		F69E37712463F95400F6D7B1 /* SelectionManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionManaging.swift; sourceTree = "<group>"; };
+		F69E37732465204700F6D7B1 /* AlarmSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSetting.swift; sourceTree = "<group>"; };
+		F69E377524653E7600F6D7B1 /* ActionStylePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStylePicker.swift; sourceTree = "<group>"; };
 		F6C130B9245EAC420095B0A4 /* ListRowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowAction.swift; sourceTree = "<group>"; };
 		F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowBackgroundColor.swift; sourceTree = "<group>"; };
 		F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Helpers.swift"; sourceTree = "<group>"; };
@@ -211,9 +217,10 @@
 		F69272A12453B5DB0070B91D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F6C130B8245EAC000095B0A4 /* Modifiers */,
+				F6C130B8245EAC000095B0A4 /* Supporting Views */,
 				F69273D42455662F0070B91D /* AlarmList.swift */,
 				F69273D624556B1C0070B91D /* AlarmCard.swift */,
+				F69E37732465204700F6D7B1 /* AlarmSetting.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -237,18 +244,20 @@
 				F69273DB2456477E0070B91D /* Color+Helpers.swift */,
 				F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */,
 				F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */,
-				F69E37712463F95400F6D7B1 /* SelectionManager.swift */,
+				F69E37712463F95400F6D7B1 /* SelectionManaging.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		F6C130B8245EAC000095B0A4 /* Modifiers */ = {
+		F6C130B8245EAC000095B0A4 /* Supporting Views */ = {
 			isa = PBXGroup;
 			children = (
 				F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */,
 				F6C130B9245EAC420095B0A4 /* ListRowAction.swift */,
+				F69E377524653E7600F6D7B1 /* ActionStylePicker.swift */,
+				F61E4EBF246B872E00BF09FD /* ListRowStylePicker.swift */,
 			);
-			path = Modifiers;
+			path = "Supporting Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -391,7 +400,10 @@
 				F69273EE245815C70070B91D /* SystemClock.swift in Sources */,
 				F69273DE24569A320070B91D /* Alarm.swift in Sources */,
 				F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */,
-				F69E37722463F95400F6D7B1 /* SelectionManager.swift in Sources */,
+				F69E37742465204700F6D7B1 /* AlarmSetting.swift in Sources */,
+				F61E4EC0246B872E00BF09FD /* ListRowStylePicker.swift in Sources */,
+				F69E37722463F95400F6D7B1 /* SelectionManaging.swift in Sources */,
+				F69E377624653E7600F6D7B1 /* ActionStylePicker.swift in Sources */,
 				F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */,
 				F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */,
 				F69273D924556D6F0070B91D /* Weekday.swift in Sources */,

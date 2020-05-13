@@ -13,7 +13,15 @@ struct AlarmList: View {
     var body: some View {
         List {
             ForEach(userData.alarms) { alarm in
-                AlarmCard(alarm: alarm)
+                if alarm.isAwakeConfirmed {
+                    NavigationLink(destination: AlarmSetting(alarm: alarm)) {
+                        AlarmCard(alarm: alarm)
+                    }
+                    .listRowPlatterColor(.clear)
+                } else {
+                    AlarmCard(alarm: alarm)
+                }
+                
             }
         }
         .navigationBarTitle(Text("Alarms"))

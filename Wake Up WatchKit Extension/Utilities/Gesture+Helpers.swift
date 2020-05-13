@@ -13,7 +13,7 @@ extension DragGesture {
     static func rowActionDragGesture(_ translationState: TranslationState, selectionManager: RowActionSelectionManager?) -> some Gesture {
         let rowActionGesture = DragGesture(minimumDistance: 16.0, coordinateSpace: .local)
         .onChanged { (value) in
-            selectionManager?.currentSelection = translationState
+            selectionManager?.changeSelection(translationState)
             let translation = value.location.x - value.startLocation.x
             if translationState.totalOffset > translationState.defaultPosition {  // over the default position, scrub with interpolation
                 switch translationState.positionState {
@@ -44,7 +44,7 @@ extension DragGesture {
 
             if finalPosition > translationState.defaultPosition {  // Over default position
                 translationState.positionState = .default
-                selectionManager?.currentSelection = nil
+                selectionManager?.changeSelection(nil)
             } else if finalPosition < translationState.trailingActionEndPosition {   // Over the trailing action end position
                 translationState.positionState = .showingTrailingAction
             } else {
@@ -57,12 +57,12 @@ extension DragGesture {
                         translationState.positionState = .showingTrailingAction
                     } else {
                         translationState.positionState = .default
-                        selectionManager?.currentSelection = nil
+                        selectionManager?.changeSelection(nil)
                     }
                 case .showingTrailingAction:
                     if abs(translation) > trailingActionStateChangeThreashold {
                         translationState.positionState = .default
-                        selectionManager?.currentSelection = nil
+                        selectionManager?.changeSelection(nil)
                     } else {
                         translationState.positionState = .showingTrailingAction
                     }
@@ -78,8 +78,8 @@ extension DragGesture {
 }
 
 /// Represents the state of the translation induced by the drag gesture. Uses a class instead of a struct so that the selection manager could use translation state to keep track of the row action states.
-class TranslationState: ObservableObject {
-    var id: UUID
+class TranslationState: ObservableObject, Identifiable {
+    let id = UUID()
     @Published var totalOffset: CGFloat = 0.0
     
     /// Repersents the current position of the row.
@@ -123,7 +123,6 @@ class TranslationState: ObservableObject {
     }
     
     init(trailingActionEndPosition: CGFloat) {
-        self.id = UUID()
         self.trailingActionEndPosition = trailingActionEndPosition
     }
     
@@ -148,14 +147,10 @@ class TranslationState: ObservableObject {
     }
 }
 
-extension TranslationState: Deselectable {
+extension TranslationState: Selectable {
+    func select() {}
+    
     func deselect() {
         positionState = .default
-    }
-}
-
-extension TranslationState: Equatable {
-    static func == (lhs: TranslationState, rhs: TranslationState) -> Bool {
-        return lhs.id == rhs.id
     }
 }

@@ -37,6 +37,10 @@ struct AlarmTime {
         return AlarmTime(ofDate: Calendar.autoupdatingCurrent.startOfDay(for: underlyingDateComponents.date!))
     }
     
+    var endOfDay: AlarmTime {
+        return AlarmTime(ofDate: Calendar.autoupdatingCurrent.startOfDay(for: underlyingDateComponents.date!).advanced(by: 24.hour))
+    }
+    
     /// Returns an  `AlarmTime` advanced by the `hours` hours and `minutes` minutes from the current `AlarmTime` instance.
     func advancedBy(hours: Int = 0, minutes: Int) -> AlarmTime {
         return AlarmTime(ofDate: underlyingDateComponents.date!.advanced(by: hours.hour + minutes.minute))
@@ -96,7 +100,6 @@ extension AlarmTime {
         return times
     }
     
-    
     /// Generates an array of alarm time with range [`self`, `end`), each element is `stride` minutes later than the previous element in the array.
     /// - Parameters:
     ///   - end: The end time. Indicates the upper asympototic time.
@@ -105,17 +108,21 @@ extension AlarmTime {
     func alarmTimes(until end: AlarmTime, stride: Int = 1) -> [AlarmTime] {
         return AlarmTime.alarmTimes(start: self, end: end, stride: stride)
     }
+    
+    static func allDayAlarmTimesFor(_ alarmTime: AlarmTime, stride: Int = 1) -> [AlarmTime] {
+        return alarmTimes(start: alarmTime.startOfDay, end: alarmTime.endOfDay, stride: stride)
+    }
 }
 
 // MARK: - Basic behavior protocols
 
 extension AlarmTime: CustomStringConvertible {
     var description: String {
-        "\(self.day) \(self.timeDescription)"
+        self.timeDescription
     }
 }
 
-extension AlarmTime: Equatable, Codable {}
+extension AlarmTime: Equatable, Hashable, Codable {}
 
 extension AlarmTime: Comparable {
     static func < (lhs: AlarmTime, rhs: AlarmTime) -> Bool {

@@ -14,14 +14,15 @@ struct AlarmCard: View {
     
     var body: some View {
         Group {
-            if alarm.isOn && alarm.isAwakeConfirmed {
+            // display list row action button only when alarm is configured and is awake confirmed
+            if alarm.isConfigured && alarm.isAwakeConfirmed {
                 rowContent
                 .listRowActionButton(action: { self.toggleMuted(for: self.alarm) }) {
                     Group {
                         if alarm.isMuted {
                             RowActionView(alarm: alarm)
                                 .transition(.opacity)
-                                .animation(.linear(duration: 15))
+                                .animation(.linear(duration: 2))
                                 // using if-else with transition here so that the row action disappears when tapped instead of flickers to the new value
                         } else {
                             RowActionView(alarm: alarm)
@@ -141,7 +142,7 @@ struct ConfirmAwakeButton: View {
         }
         .padding()
         .background(Color.listRowPlatterColor(for: alarm, in: userData))
-        .cornerRadius(8)
+        .cornerRadius(listRowCornerRadius)
         .shadow(color: Color.black.opacity(0.5), radius: 10, x: 0, y: 0)
     }
 }
@@ -150,16 +151,11 @@ struct RowActionView: View {
     let alarm: Alarm
     var body: some View {
         Image(systemName: alarm.rowActionImageName)
-            .transition(.opacity)
-            .animation(.easeInOut(duration: 4))
             
             .font(.system(size: 33, weight: .medium))
             .foregroundColor(.white)
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .background(Color.rowActionBackgroundColor(for: alarm))
-            .transition(.opacity)
-            
-            .animation(.easeInOut(duration: 4))
     }
 }
 

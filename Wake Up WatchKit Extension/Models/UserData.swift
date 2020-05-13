@@ -26,7 +26,7 @@ final class UserData: ObservableObject {
     var alarmTimeUpdateCancellable: AnyCancellable?
     
     var nextAlarm: Alarm {
-        if alarms[0].isOn && !alarms[0].isMuted && !alarms[0].isAwakeConfirmed {
+        if alarms[0].isConfigured && !alarms[0].isMuted && !alarms[0].isAwakeConfirmed {
             return alarms[0]
         } else {
             return alarms[1]
@@ -74,7 +74,7 @@ final class UserData: ObservableObject {
             }
             
             // If the 0th alarm is on and not muted, set its isWakeConfirmed state to false
-            if newAlarms[0].isOn && !newAlarms[0].isMuted {
+            if newAlarms[0].isConfigured && !newAlarms[0].isMuted {
                 newAlarms[0].isAwakeConfirmed = false
             }
             // Memorize the last update date as the start of day of now
@@ -87,13 +87,26 @@ final class UserData: ObservableObject {
     /// Sets `isAwakeConfirmed` for alarm to true.
     /// - Parameter alarm: The `Alarm` instance that needs to confirm awake.
     func confirmAwake(for alarm: Alarm) {
-        guard let alarmIndex = self.alarms.firstIndex(of: alarm) else { fatalError("Cannot find alarm") }
+        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
         self.alarms[alarmIndex].isAwakeConfirmed = true
     }
     
     func toggleMuted(for alarm: Alarm) {
-        guard let alarmIndex = self.alarms.firstIndex(of: alarm) else { fatalError("Cannot find alarm") }
+        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
         self.alarms[alarmIndex].isMuted.toggle()
+    }
+    
+    func configureAlarm(_ alarm: Alarm) {
+        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].isConfigured = true
+        if let prefillAlarm = self.prefillAlarm {
+            self.alarms[alarmIndex].configure(using: prefillAlarm)
+        }
+    }
+    
+    func syncAlarm(_ alarm: Alarm) {
+        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].configure(using: alarm)
     }
 }
 

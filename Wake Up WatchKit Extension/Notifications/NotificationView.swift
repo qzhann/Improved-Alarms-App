@@ -10,7 +10,22 @@ import SwiftUI
 
 struct NotificationView: View {
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            Text("Today's Weather")
+                .font(.system(size: 17, weight: .semibold))
+            
+            HStack(spacing: 19) {
+                Text("72°")
+                Image(systemName: "sun.max.fill")
+                    .foregroundColor(.yellow)
+            }
+            .font(.system(size: 43, weight: .light))
+            
+            HStack(spacing: 19) {
+                Text("L: 71°")
+                Text("H: 75°")
+            }
+        }
     }
 }
 
