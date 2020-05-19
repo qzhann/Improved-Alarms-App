@@ -30,27 +30,34 @@ struct ActionStylePicker<SelectionValue, LabelContent>: View where SelectionValu
     
     var body: some View {
         VStack {
-            ZStack(alignment: .leading) {
-                // picker
-                Picker(selection: $pickerSelectionValue, label: EmptyView()) {
-                    ForEach(allPickerSelectionValues, id: \.hashValue) { selection in
-                        HStack {
-                            Spacer()
-                            Text(selection.description)
-                                .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
-                                .padding(.trailing, 2)
-                        }.tag(selection)
-                    }
-                }
-                // Clips out the default selection border
-                .clipShape(RoundedRectangle(cornerRadius: listRowCornerRadius).scale(x: 0.9, y: 0.5, anchor: .center))
-                
+            HStack {
                 // picker label
-                label
+                self.label
                     .font(.system(size: 17, weight: .light))
                     .foregroundColor(.white)
-//                    .colorMultiply(self.exclusiveSelectionItem.isSelected ? .systemGreen: .white)
+                    .colorMultiply(self.isSelected ? .systemGreen: .white)
                     .padding()
+                    .fixedSize()
+                
+                GeometryReader { proxy in
+                    // picker
+                    Picker(selection: self.$pickerSelectionValue, label: EmptyView()) {
+                        ForEach(self.allPickerSelectionValues, id: \.hashValue) { selection in
+                            HStack {
+                                Spacer()
+                                Text(selection.description)
+                                    .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
+                                    .padding(.trailing, 2)
+                            }.tag(selection)
+                        }
+                    }
+                    .padding(.leading, -100)
+                    .mask(RoundedRectangle(cornerRadius: listRowCornerRadius).size(width: proxy.size.width + 100, height: proxy.size.height).transform(.init(translationX: -100, y: 0)).scale(x: 0.9, y: 0.7, anchor: .center))
+//                    // Clips out the default selection border
+//                    .clipShape(RoundedRectangle(cornerRadius: listRowCornerRadius).transform(.init(translationX: -5, y: 0)).scale(x: 0.95, y: 0.5, anchor: .center))
+                }
+                
+                
             }
         }
         .frame(height: 44)
