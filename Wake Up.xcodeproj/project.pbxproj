@@ -32,7 +32,7 @@
 		F69E376E2462460D00F6D7B1 /* Number+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */; };
 		F69E37702463B89A00F6D7B1 /* Gesture+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */; };
 		F69E37742465204700F6D7B1 /* AlarmSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E37732465204700F6D7B1 /* AlarmSetting.swift */; };
-		F69E377624653E7600F6D7B1 /* ActionStylePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E377524653E7600F6D7B1 /* ActionStylePicker.swift */; };
+		F69E377624653E7600F6D7B1 /* ListRowStylePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69E377524653E7600F6D7B1 /* ListRowStylePicker.swift */; };
 		F6C130BA245EAC420095B0A4 /* ListRowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130B9245EAC420095B0A4 /* ListRowAction.swift */; };
 		F6C130BC245EB09D0095B0A4 /* ListRowBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */; };
 		F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */; };
@@ -110,7 +110,7 @@
 		F69E376D2462460D00F6D7B1 /* Number+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+Helpers.swift"; sourceTree = "<group>"; };
 		F69E376F2463B89A00F6D7B1 /* Gesture+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+Helpers.swift"; sourceTree = "<group>"; };
 		F69E37732465204700F6D7B1 /* AlarmSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSetting.swift; sourceTree = "<group>"; };
-		F69E377524653E7600F6D7B1 /* ActionStylePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStylePicker.swift; sourceTree = "<group>"; };
+		F69E377524653E7600F6D7B1 /* ListRowStylePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowStylePicker.swift; sourceTree = "<group>"; };
 		F6C130B9245EAC420095B0A4 /* ListRowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowAction.swift; sourceTree = "<group>"; };
 		F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowBackgroundColor.swift; sourceTree = "<group>"; };
 		F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Helpers.swift"; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 			children = (
 				F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */,
 				F6C130B9245EAC420095B0A4 /* ListRowAction.swift */,
-				F69E377524653E7600F6D7B1 /* ActionStylePicker.swift */,
+				F69E377524653E7600F6D7B1 /* ListRowStylePicker.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -395,7 +395,7 @@
 				F69273DE24569A320070B91D /* Alarm.swift in Sources */,
 				F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */,
 				F69E37742465204700F6D7B1 /* AlarmSetting.swift in Sources */,
-				F69E377624653E7600F6D7B1 /* ActionStylePicker.swift in Sources */,
+				F69E377624653E7600F6D7B1 /* ListRowStylePicker.swift in Sources */,
 				F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */,
 				F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */,
 				F69273D924556D6F0070B91D /* Weekday.swift in Sources */,

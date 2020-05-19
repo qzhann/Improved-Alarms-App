@@ -1,5 +1,5 @@
 //
-//  ActionStylePicker.swift
+//  ListRowStylePicker.swift
 //  Wake Up WatchKit Extension
 //
 //  Created by Zihan Qi on 5/8/20.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ActionStylePicker<SelectionValue, LabelContent>: View where SelectionValue: Hashable, SelectionValue: CustomStringConvertible, LabelContent: View {
+struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionValue: Hashable, SelectionValue: CustomStringConvertible, LabelContent: View {
     let label: LabelContent
     @Binding var pickerSelectionValue: SelectionValue
     let allPickerSelectionValues: [SelectionValue]
@@ -91,7 +91,7 @@ struct ActionStylePicker<SelectionValue, LabelContent>: View where SelectionValu
     }
 }
 
-extension ActionStylePicker where LabelContent == Text {
+extension ListRowStylePicker where LabelContent == Text {
     init(label: String, selection: Binding<SelectionValue>, allSelections: [SelectionValue], globalExclusivePickerSelection: Binding<Int?>, managedExclusivePickerSelection: Int) {
         self.init(label: Text(label), selection: selection, allSelections: allSelections, globalExclusivePickerSelection: globalExclusivePickerSelection, managedExclusivePickerSelection: managedExclusivePickerSelection)
     }
@@ -109,8 +109,8 @@ struct ActionStylePicker_Preview: View {
                 Text(selection2.timeDescription)
             }
            
-            ActionStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 0)
-            ActionStylePicker(label: "Final Alarm", selection: $selection2, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
+            ListRowStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 0)
+            ListRowStylePicker(label: "Final Alarm", selection: $selection2, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
         }
         
     }

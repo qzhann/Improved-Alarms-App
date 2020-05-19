@@ -29,7 +29,7 @@ struct AlarmSetting: View {
                 if !alarm.isConfigured {
                     ConfigureAlarmButton(alarm: alarm)
                 } else {
-//                    ActionStylePicker(label: "Final Alarm", selection: $draftAlarm.finalAlarmTime, allSelections: allSelections, isSelected: true)
+//                    ListRowStylePicker(label: "Final Alarm", selection: $draftAlarm.finalAlarmTime, allSelections: allSelections, isSelected: true)
 //                        .frame(width: screenWidth + 4)
 
                     Group {
