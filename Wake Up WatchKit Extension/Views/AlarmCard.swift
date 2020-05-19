@@ -12,12 +12,14 @@ struct AlarmCard: View {
     @EnvironmentObject var userData: UserData
     var alarm: Alarm
     
+    @Binding var globalRowActionSelection: Alarm?
+    
     var body: some View {
         Group {
             // display list row action button only when alarm is configured and is awake confirmed
             if alarm.isConfigured && alarm.isAwakeConfirmed {
                 rowContent
-                .listRowActionButton(action: { self.toggleMuted(for: self.alarm) }) {
+                    .listRowActionButton(globalSelection: $globalRowActionSelection, managedSelection: alarm, action: { self.toggleMuted(for: self.alarm) }) {
                     Group {
                         if alarm.isMuted {
                             RowActionView(alarm: alarm)
@@ -34,7 +36,6 @@ struct AlarmCard: View {
                 rowContent
             }
         }
-        .padding(0)
     }
     
     var rowContent: some View {
@@ -159,15 +160,23 @@ struct RowActionView: View {
     }
 }
 
-struct AlarmCard_Previews: PreviewProvider {
-    static var previews: some View {
+struct AlarmCard_Preview: View {
+    @State var globalSelection: Alarm? = .default
+    var body: some View {
         Group {
             ForEach(testUserData.alarms) {alarm in
                 List {
-                    AlarmCard(alarm: alarm)
+                    AlarmCard(alarm: alarm, globalRowActionSelection: self.$globalSelection)
                 }
             }
         }
         .environmentObject(testUserData)
+    }
+}
+
+struct AlarmCard_Previews: PreviewProvider {
+    static var previews: some View {
+        // Using a custom view struct to circumvent problems with using property wrapper on static variables
+        AlarmCard_Preview()
     }
 }

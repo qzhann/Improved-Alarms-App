@@ -8,25 +8,48 @@
 
 import SwiftUI
 
-struct ListRowActionModifier<ActionContent: View>: ViewModifier {
+struct ListRowActionModifier<ActionContent, SelectionValue>: ViewModifier where ActionContent: View, SelectionValue: Hashable {
     let action: () -> Void
     let actionContent: ActionContent
-    weak var selectionManager: RowActionSelectionManager?
-    
+    @Binding private var globalSelection: SelectionValue?
+    private let managedSelection: SelectionValue
+    var isSelected: Bool {
+        globalSelection == managedSelection
+    }
+
     @ObservedObject var translationState = TranslationState(trailingActionEndPosition: -(screenWidth / 2) - 1)
     
-    init(action: @escaping () -> Void, selectionManager: RowActionSelectionManager, actionContent: ActionContent) {
+    init(globalSelection: Binding<SelectionValue?>, managedSelection: SelectionValue, action: @escaping () -> Void, actionContent: ActionContent) {
+        self._globalSelection = globalSelection
+        self.managedSelection = managedSelection
         self.action = action
         self.actionContent = actionContent
-        self.selectionManager = selectionManager
-        selectionManager.addManagedSelection(translationState)
+        
+        if !self.isSelected {
+            self.translationState.positionState = .default
+        }
     }
     
     func body(content: Content) -> some View {
         content
             .offset(x: self.translationState.totalOffset, y: 0)
             .animation(Animation.interactiveSpring())
-            .gesture(DragGesture.rowActionDragGesture(translationState, selectionManager: selectionManager))
+            .gesture(DragGesture.rowActionDragGesture(translationState))
+            .simultaneousGesture(
+                // changes global selection if global selection was not selecting on the managed selection
+                DragGesture(minimumDistance: 16, coordinateSpace: .local)
+                    .onChanged { (value) in
+                        if self.globalSelection != self.managedSelection {
+                            self.globalSelection = self.managedSelection
+                        }
+                    }
+            )
+            .focusable(true, onFocusChange: { (isFocused) in
+                // Resets the position state on losing focus
+                if !isFocused {
+                    self.translationState.positionState = .default
+                }
+            })
             .background(
                 HStack {
                     Spacer()
@@ -59,18 +82,24 @@ extension View {
     ///   - action: The action to perform when `viewContent` is tapped.
     ///   - selectionManager: The row action selection manager used to manage row action selection exclusivity. Defaults to the `ExclusiveSelectionManager.shared`.
     ///   - viewContent: The view content being displayed as the row action.
-    func listRowActionButton<ViewContent: View>(action: @escaping () -> Void, selectionManager: RowActionSelectionManager = .shared, viewContent: () -> ViewContent) -> some View {
-        self.modifier(ListRowActionModifier(action: action, selectionManager: selectionManager, actionContent: viewContent()))
+    func listRowActionButton<ViewContent, ID>(globalSelection: Binding<ID?>, managedSelection: ID, action: @escaping () -> Void, viewContent: () -> ViewContent) -> some View where ViewContent: View, ID: Hashable {
+        self.modifier(ListRowActionModifier(globalSelection: globalSelection, managedSelection: managedSelection, action: action, actionContent: viewContent()))
+    }
+}
+
+struct ListRowAction_Preview: View {
+    @State var globalSelection: Alarm? = Alarm.default
+    var body: some View {
+        List {
+            // The list row action has already been applied in the AlarmCard instance
+            AlarmCard(alarm: Alarm.sampleAlarms[1], globalRowActionSelection: self.$globalSelection)
+        }
+        .environmentObject(testUserData)
     }
 }
 
 struct ListRowAction_Previews: PreviewProvider {
     static var previews: some View {
-        List {
-            // The list row action has already been applied in the AlarmCard instance
-            AlarmCard(alarm: Alarm.sampleAlarms[1])
-                
-        }
-        .environmentObject(testUserData)
+        ListRowAction_Preview()
     }
 }

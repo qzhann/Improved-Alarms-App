@@ -10,18 +10,20 @@ import SwiftUI
 
 struct AlarmList: View {
     @EnvironmentObject var userData: UserData
+    @State var globalRowActionSelection: Alarm? = .default
     var body: some View {
         List {
             ForEach(userData.alarms) { alarm in
-                if alarm.isAwakeConfirmed {
-                    NavigationLink(destination: AlarmSetting(alarm: alarm)) {
-                        AlarmCard(alarm: alarm)
+                Group {
+                    if alarm.isAwakeConfirmed {
+                        NavigationLink(destination: AlarmSetting(alarm: alarm)) {
+                            AlarmCard(alarm: alarm, globalRowActionSelection: self.$globalRowActionSelection)
+                        }
+                        .listRowPlatterColor(.clear)
+                    } else {
+                        AlarmCard(alarm: alarm, globalRowActionSelection: self.$globalRowActionSelection)
                     }
-                    .listRowPlatterColor(.clear)
-                } else {
-                    AlarmCard(alarm: alarm)
                 }
-                
             }
         }
         .navigationBarTitle(Text("Alarms"))

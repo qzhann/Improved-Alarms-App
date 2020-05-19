@@ -19,7 +19,7 @@ extension View {
                     color
                         .frame(width: screenWidth)
                         .cornerRadius(listRowCornerRadius)
-            )
+                )
         }
         .frame(height: 100)
         .listRowPlatterColor(.clear)

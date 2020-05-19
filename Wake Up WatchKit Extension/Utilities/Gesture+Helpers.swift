@@ -10,10 +10,9 @@ import SwiftUI
 
 extension DragGesture {
     /// Returns a row action drag gesture that binds to a translation state.
-    static func rowActionDragGesture(_ translationState: TranslationState, selectionManager: RowActionSelectionManager?) -> some Gesture {
+    static func rowActionDragGesture(_ translationState: TranslationState) -> some Gesture {
         let rowActionGesture = DragGesture(minimumDistance: 16.0, coordinateSpace: .local)
         .onChanged { (value) in
-            selectionManager?.changeSelection(translationState)
             let translation = value.location.x - value.startLocation.x
             if translationState.totalOffset > translationState.defaultPosition {  // over the default position, scrub with interpolation
                 switch translationState.positionState {
@@ -44,7 +43,6 @@ extension DragGesture {
 
             if finalPosition > translationState.defaultPosition {  // Over default position
                 translationState.positionState = .default
-                selectionManager?.changeSelection(nil)
             } else if finalPosition < translationState.trailingActionEndPosition {   // Over the trailing action end position
                 translationState.positionState = .showingTrailingAction
             } else {
@@ -57,12 +55,10 @@ extension DragGesture {
                         translationState.positionState = .showingTrailingAction
                     } else {
                         translationState.positionState = .default
-                        selectionManager?.changeSelection(nil)
                     }
                 case .showingTrailingAction:
                     if abs(translation) > trailingActionStateChangeThreashold {
                         translationState.positionState = .default
-                        selectionManager?.changeSelection(nil)
                     } else {
                         translationState.positionState = .showingTrailingAction
                     }
@@ -144,13 +140,5 @@ class TranslationState: ObservableObject, Identifiable {
         let factor: CGFloat = 0.1
         let returnValue = factor + (1 - factor) * offsetFactor.clamped(min: 0, max: 1)
         return Double(returnValue)
-    }
-}
-
-extension TranslationState: Selectable {
-    func select() {}
-    
-    func deselect() {
-        positionState = .default
     }
 }

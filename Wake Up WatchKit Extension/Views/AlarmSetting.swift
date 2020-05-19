@@ -12,7 +12,10 @@ struct AlarmSetting: View {
     @EnvironmentObject var userData: UserData
     var alarm: Alarm
     @State var draftAlarm = Alarm.default
+    @State private var globalSelection: Int?
+    
     var allSelections: [AlarmTime]
+
     
     init(alarm: Alarm) {
         self.allSelections = AlarmTime.allDayAlarmTimesFor(alarm.finalAlarmTime, stride: 15)
@@ -26,8 +29,8 @@ struct AlarmSetting: View {
                 if !alarm.isConfigured {
                     ConfigureAlarmButton(alarm: alarm)
                 } else {
-                    ActionStylePicker(label: "Final Alarm", selection: $draftAlarm.finalAlarmTime, allSelections: allSelections, isSelected: true)
-                        .frame(width: screenWidth + 4)
+//                    ActionStylePicker(label: "Final Alarm", selection: $draftAlarm.finalAlarmTime, allSelections: allSelections, isSelected: true)
+//                        .frame(width: screenWidth + 4)
 
                     Group {
                         RemoveAlarmButton(alarm: alarm)

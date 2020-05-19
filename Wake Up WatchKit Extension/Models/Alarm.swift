@@ -169,6 +169,12 @@ extension Alarm: CustomStringConvertible {
 
 extension Alarm: Equatable {}
 
+extension Alarm: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 extension SnoozeState: Equatable {}
 
 extension SleepReminderState: Equatable {}
