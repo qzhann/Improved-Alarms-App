@@ -29,46 +29,9 @@ struct ActionStylePicker<SelectionValue, LabelContent>: View where SelectionValu
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                // picker label
-                self.label
-                    .font(.system(size: 17, weight: .light))
-                    .foregroundColor(.white)
-                    .colorMultiply(self.isSelected ? .systemGreen: .white)
-                    .padding()
-                    .fixedSize()
-                
-                GeometryReader { proxy in
-                    // picker
-                    Picker(selection: self.$pickerSelectionValue, label: EmptyView()) {
-                        ForEach(self.allPickerSelectionValues, id: \.hashValue) { selection in
-                            HStack {
-                                Spacer()
-                                Text(selection.description)
-                                    .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
-                                    .padding(.trailing, 2)
-                            }.tag(selection)
-                        }
-                    }
-                    .padding(.leading, -100)
-                    .mask(RoundedRectangle(cornerRadius: listRowCornerRadius).size(width: proxy.size.width + 100, height: proxy.size.height).transform(.init(translationX: -100, y: 0)).scale(x: 0.9, y: 0.7, anchor: .center))
-//                    // Clips out the default selection border
-//                    .clipShape(RoundedRectangle(cornerRadius: listRowCornerRadius).transform(.init(translationX: -5, y: 0)).scale(x: 0.95, y: 0.5, anchor: .center))
-                }
-                
-                
-            }
-        }
-        .frame(height: 44)
-        .overlay(
-            // Using color multiply to achive animation
-            RoundedRectangle(cornerRadius: listRowCornerRadius)
-                .stroke(Color.white, lineWidth: 1.5)
-                .colorMultiply(self.isSelected ? .systemGreen: .clear)
-                .padding(.all, 1)
-        )
-        .background(
+        
+        ZStack {
+            // row background
             Group {
                 // Using if-else to achieve instant transition
                 if self.isSelected {
@@ -78,13 +41,53 @@ struct ActionStylePicker<SelectionValue, LabelContent>: View where SelectionValu
                 }
                 EmptyView()
             }
+            
+            // row content
+            HStack {
+                // picker label
+                self.label
+                    .font(.system(size: 17, weight: .light))
+                    .foregroundColor(.white)
+                    .colorMultiply(self.isSelected ? .systemGreen: .white)
+                    .padding(.leading)
+                
+                Spacer()
+                
+                Text(pickerSelectionValue.description)
+                    .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
+                .fixedSize()
+                    .padding(.trailing, 8)
+            }
+            
+            // underlying picker
+            Picker(selection: self.$pickerSelectionValue, label: EmptyView()) {
+                ForEach(self.allPickerSelectionValues, id: \.hashValue) { selection in
+                    HStack {
+                        Spacer()
+                        Text(selection.description)
+                            .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
+                            .padding(.trailing, 2)
+                    }.tag(selection)
+                }
+                // disable picker selection with gesture
+                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local))
+            }
+            
+            // hide the picker to prevent the default picker animation
+            .mask(Circle().size(.zero))
+        }
+        .frame(height: 44)
+        .overlay(   // selection border
+            // Using color multiply to achive animation
+            RoundedRectangle(cornerRadius: listRowCornerRadius)
+                .stroke(Color.white, lineWidth: 1.5)
+                .colorMultiply(self.isSelected ? .systemGreen: .clear)
+                .padding(.all, 1)
         )
+        .onTapGesture {}    // activates the long press gesture
         .onLongPressGesture(minimumDuration: 0, maximumDistance: 0, pressing: { (_) in
             withAnimation(.linear(duration: 0.2)) { self.globalExclusivePickerSelection = self.managedExclusivePickerSelection }
         }, perform: {})
-            .focusable(true) { (isFocused) in
-                print(isFocused)
-        }
     }
 }
 
@@ -97,13 +100,17 @@ extension ActionStylePicker where LabelContent == Text {
 struct ActionStylePicker_Preview: View {
     @State var globalPickerSelection: Int?
     @State var selection = AlarmTime(day: .tuesday, hour: 9, minute: 00)
-    var allSelections = AlarmTime(day: .tuesday, hour: 0, minute: 00).alarmTimes(until: AlarmTime(day: .tuesday, hour: 24, minute: 01), stride: 15)
+    @State var selection2 = AlarmTime(day: .tuesday, hour: 10, minute: 45)
+    var allSelections = AlarmTime(day: .tuesday, hour: 1, minute: 00).alarmTimes(until: AlarmTime(day: .tuesday, hour: 1, minute: 00).endOfDay, stride: 15)
     var body: some View {
-        VStack {
-            Text(selection.timeDescription)
+        VStack(spacing: 5) {
+            HStack {
+                Text(selection.timeDescription)
+                Text(selection2.timeDescription)
+            }
+           
             ActionStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 0)
-            ActionStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
-//            ActionStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections)
+            ActionStylePicker(label: "Final Alarm", selection: $selection2, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
         }
         
     }
