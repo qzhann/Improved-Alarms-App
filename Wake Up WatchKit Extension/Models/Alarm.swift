@@ -15,7 +15,9 @@ enum ScheduleState {
 /// Represents an alarm for a day.
 struct Alarm: Identifiable {
     var id = UUID()
+    /// Indicates whether the alarm exist for a weekday.
     var isConfigured: Bool
+    /// Indicates whether the alarm is muted for a weekday.
     var isMuted: Bool
     var isAwakeConfirmed: Bool
     /// Indicates the final alarm time of the alarm. If alarm is off, `finalAlarmTime` indicates the day on which it is set.
@@ -23,6 +25,22 @@ struct Alarm: Identifiable {
     var departureTime: AlarmTime
     var snoozeState: SnoozeState
     var sleepReminderState: SleepReminderState
+    
+    /// Initializes an alarm.
+    init(isConfigured: Bool, isMuted: Bool, isAwakeConfirmed: Bool, finalAlarmTime: AlarmTime, departureTime: AlarmTime, snoozeState: SnoozeState, sleepReminderState: SleepReminderState) {
+        self.isConfigured = isConfigured
+        self.isMuted = isMuted
+        self.isAwakeConfirmed = isAwakeConfirmed
+        self.finalAlarmTime = finalAlarmTime
+        self.departureTime = departureTime
+        self.snoozeState = snoozeState
+        self.sleepReminderState = sleepReminderState
+    }
+    
+    /// A convenience initializer for Alarm.
+    init(isConfigured: Bool, finalAlarmTime: AlarmTime) {
+        self.init(isConfigured: isConfigured, isMuted: false, isAwakeConfirmed: true, finalAlarmTime: finalAlarmTime, departureTime: finalAlarmTime.advancedBy(minutes: 15), snoozeState: .off, sleepReminderState: .off)
+    }
     
     /// Indicates the start and end alarm time for the alarm.
     var alarmInterval: (start: AlarmTime, end: AlarmTime) {
@@ -40,27 +58,24 @@ struct Alarm: Identifiable {
         }
     }
     
-    /// Initializes a default alarm.
-    /// - Parameters:
-    init(isConfigured: Bool, finalAlarmTime: AlarmTime) {
-        // FIXME: These needs change
-        self.isConfigured = isConfigured
-        self.isMuted = false
-        self.isAwakeConfirmed = true
-        self.finalAlarmTime = finalAlarmTime
-        self.departureTime = finalAlarmTime
-        self.snoozeState = .off
-        self.sleepReminderState = .off
+    lazy var allDayAlarmTimeSelections: [AlarmTime] = {
+        AlarmTime.allDayAlarmTimesFor(finalAlarmTime, stride: 15)
+    }()
+    
+    /// Fills the current alarm using the specfied alarm.
+    mutating func fill(using alarm: Alarm) {
+        self.isMuted = alarm.isMuted
+        self.isAwakeConfirmed = alarm.isAwakeConfirmed
+        self.finalAlarmTime = AlarmTime(day: self.finalAlarmTime.day, hour: alarm.finalAlarmTime.hour, minute: alarm.finalAlarmTime.minute)
+        self.departureTime = AlarmTime(day: self.departureTime.day, hour: alarm.departureTime.hour, minute: alarm.departureTime.minute)
+        self.snoozeState = alarm.snoozeState
+        self.sleepReminderState = alarm.sleepReminderState
     }
     
-    /// Configures the current alarm using the specfied prefill alarm.
-    mutating func configure(using prefillAlarm: Alarm) {
-        self.isMuted = prefillAlarm.isMuted
-        self.isAwakeConfirmed = true
-        self.finalAlarmTime = AlarmTime(day: self.finalAlarmTime.day, hour: prefillAlarm.finalAlarmTime.hour, minute: prefillAlarm.finalAlarmTime.minute)
-        self.departureTime = AlarmTime(day: self.departureTime.day, hour: prefillAlarm.departureTime.hour, minute: prefillAlarm.departureTime.minute)
-        self.snoozeState = prefillAlarm.snoozeState
-        self.sleepReminderState = prefillAlarm.sleepReminderState
+    /// Configures the current alarm using the specified alarm.
+    mutating func configure(using alarm: Alarm) {
+        self.isConfigured = true
+        self.fill(using: alarm)
     }
     
     /// A sample array of alarms sorted by `alarmInterval`'s `start` time. Begins with sunday and ending at saturday.
@@ -77,21 +92,11 @@ struct Alarm: Identifiable {
         return alarms
     }()
     
-    static let `default`: Alarm = {
-        Alarm(isConfigured: false, finalAlarmTime: .init(day: .monday, hour: 3, minute: 15))
+    static var `default`: Alarm = {
+        Alarm(isConfigured: true, finalAlarmTime: .init(day: .monday, hour: 9, minute: 00))
     }()
 }
 
-enum SnoozeState {
-    case off
-    // minutes should be between 0 and 60.
-    case duration(minutes: Int)
-}
-
-enum SleepReminderState {
-    case off
-    case duration(hours: Int = 8)
-}
 
 // MARK: - View model
 
@@ -167,71 +172,17 @@ extension Alarm: CustomStringConvertible {
     }
 }
 
-extension Alarm: Equatable {}
-
-extension Alarm: Hashable {
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
-
-extension SnoozeState: Equatable {}
-
-extension SleepReminderState: Equatable {}
-
 extension Alarm: Comparable {
     static func <(lhs: Alarm, rhs: Alarm) -> Bool {
         return lhs.alarmInterval.start < rhs.alarmInterval.start
     }
 }
 
-extension SnoozeState: Codable {
-    enum CodingKeys: String, CodingKey {
-        case off, duration
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case .off:
-            try container.encode("", forKey: .off)
-        case .duration(minutes: let minutes):
-            try container.encode(minutes, forKey: .duration)
-        }
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let minutes = try? container.decode(Int.self, forKey: .duration) {
-            self = .duration(minutes: minutes)
-        } else {
-            self = .off
-        }
-    }
-}
+extension Alarm: Equatable {}
 
-extension SleepReminderState: Codable {
-    enum CodingKeys: String, CodingKey {
-        case off, duration
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case .off:
-            try container.encode("", forKey: .off)
-        case .duration(hours: let hours):
-            try container.encode(hours, forKey: .duration)
-        }
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let hours = try? container.decode(Int.self, forKey: .duration) {
-            self = .duration(hours: hours)
-        } else {
-            self = .off
-        }
+extension Alarm: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 

@@ -18,7 +18,7 @@ final class UserData: ObservableObject {
             self.reorderAlarms(using: systemClock.currentAlarmTime)
         }
     }
-    var prefillAlarm: Alarm?
+    var prefillAlarm = Alarm.default
     var systemClock: SystemClock
     /// The last time `alarms` was reorderd. `mostRecentReorderDate` is usally set to be the start of day when reordering occurs, so that if the app did not launch in a week, it will trigger a reorder once it has reached past the start of day.
     var mostRecentReorderDate: Date
@@ -38,10 +38,11 @@ final class UserData: ObservableObject {
     ///   - alarms: An array of `Alarm` used by `UserData`.
     ///   - systemClock: The `SystemClock` used by `UserData`. Providing a non-default instance could change the clock speed, useful for testing.
     ///   - mostRecentReorderDate: The start of day of the most recent Date that `alarms` was reorderd.
-    init(alarms: [Alarm], systemClock: SystemClock = SystemClock(), mostRecentReorderDate: Date = Date()) {
+    init(alarms: [Alarm], prefillAlarm: Alarm = .default, systemClock: SystemClock = SystemClock(), mostRecentReorderDate: Date = Date()) {
         assert(alarms.count >= 2, "alarms should have at least 2 items.")
         let sortedAlarms = alarms.sorted(by: <)
         self.alarms = sortedAlarms
+        self.prefillAlarm = prefillAlarm
         self.systemClock = systemClock
         self.mostRecentReorderDate = mostRecentReorderDate
         // Note that reorder will fire as soon as the subscription is activated
@@ -54,7 +55,7 @@ final class UserData: ObservableObject {
     /// Initializes a `UserData` by specifying alarms, the isAwakeConfirmed status for the 0th day, and the alarm that will appear for the next day.
     convenience init(alarms: [Alarm], isAwakeConfirmed: Bool, nextAlarmDay: Weekday) {
         let initialDate = alarms.first(where: { $0.day == nextAlarmDay })!.alarmInterval.start.advancedBy(minutes: -5).date
-        self.init(alarms: alarms, systemClock: SystemClock.nonUpdatingClock(initialDate: initialDate), mostRecentReorderDate: initialDate)
+        self.init(alarms: alarms, prefillAlarm: Alarm.default, systemClock: SystemClock.nonUpdatingClock(initialDate: initialDate), mostRecentReorderDate: initialDate)
         self.alarms[0].isAwakeConfirmed = isAwakeConfirmed
     }
     
@@ -87,27 +88,40 @@ final class UserData: ObservableObject {
     /// Sets `isAwakeConfirmed` for alarm to true.
     /// - Parameter alarm: The `Alarm` instance that needs to confirm awake.
     func confirmAwake(for alarm: Alarm) {
-        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
+        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
         self.alarms[alarmIndex].isAwakeConfirmed = true
     }
     
+    /// Toggles `isMuted` for alarm.
+    /// - Parameter alarm: The `Alarm` instance that needs to toggle muted state.
     func toggleMuted(for alarm: Alarm) {
-        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
+        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
         self.alarms[alarmIndex].isMuted.toggle()
     }
     
-    func configureAlarm(_ alarm: Alarm) {
-        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].isConfigured = true
-        if let prefillAlarm = self.prefillAlarm {
-            self.alarms[alarmIndex].configure(using: prefillAlarm)
-        }
+    /// Replaces the alarm at the index of `origionalAlarm` with the new alarm
+    func syncAlarm(_ newAlarm: Alarm, origionalAlarm: Alarm) {
+        guard let alarmIndex = indexForAlarm(origionalAlarm) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].fill(using: newAlarm)
     }
     
-    func syncAlarm(_ alarm: Alarm) {
-        guard let alarmIndex = self.alarms.firstIndex(where: {$0.id == alarm.id}) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].configure(using: alarm)
+    /// Configures the specified alarm using the prefill alarm.
+    /// - Parameter alarm: The alarm that needs to be configured.
+    func configureAlarm(_ alarm: Alarm) {
+        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].configure(using: prefillAlarm)
     }
+    
+    /// Removes the specified alarm. Current implementation sets the specified alarm's `isConfigured` to false.
+    func removeAlarm(_ alarm: Alarm) {
+        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
+        self.alarms[alarmIndex].isConfigured = false
+    }
+    
+    private func indexForAlarm(_ alarm: Alarm) -> Int? {
+        self.alarms.firstIndex(where: {$0.id == alarm.id})
+    }
+    
 }
 
 // MARK: - Basic behavior protocols
@@ -115,6 +129,7 @@ final class UserData: ObservableObject {
 extension UserData: Equatable {
     static func == (lhs: UserData, rhs: UserData) -> Bool {
         return lhs.alarms == rhs.alarms &&
+            lhs.prefillAlarm == rhs.prefillAlarm &&
             lhs.mostRecentReorderDate == rhs.mostRecentReorderDate
     }
 }
@@ -122,19 +137,22 @@ extension UserData: Equatable {
 extension UserData: Codable {
     enum CodingKeys: String, CodingKey {
         case alarms
+        case prefillAlarm
         case lastUpdateDate
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(alarms, forKey: .alarms)
+        try container.encode(prefillAlarm, forKey: .prefillAlarm)
         try container.encode(mostRecentReorderDate, forKey: .lastUpdateDate)
     }
     
     convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let alarms = try container.decode([Alarm].self, forKey: .alarms)
+        let prefillAlarm = try container.decode(Alarm.self, forKey: .prefillAlarm)
         let lastUpdateDate = try container.decode(Date.self, forKey: .lastUpdateDate)
-        self.init(alarms: alarms, mostRecentReorderDate: lastUpdateDate)
+        self.init(alarms: alarms, prefillAlarm: prefillAlarm, mostRecentReorderDate: lastUpdateDate)
     }
 }

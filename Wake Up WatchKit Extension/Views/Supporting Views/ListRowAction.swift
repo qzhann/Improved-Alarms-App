@@ -17,7 +17,7 @@ struct ListRowActionModifier<ActionContent, SelectionValue>: ViewModifier where 
         globalSelection == managedSelection
     }
 
-    @ObservedObject var translationState = TranslationState(trailingActionEndPosition: -(screenWidth / 2) - 1)
+    @ObservedObject var translationState = TranslationState(trailingActionEndPosition: -(screenWidth / 2) - 1.5)
     
     init(globalSelection: Binding<SelectionValue?>, managedSelection: SelectionValue, action: @escaping () -> Void, actionContent: ActionContent) {
         self._globalSelection = globalSelection
@@ -92,7 +92,7 @@ struct ListRowAction_Preview: View {
     var body: some View {
         List {
             // The list row action has already been applied in the AlarmCard instance
-            AlarmCard(alarm: Alarm.sampleAlarms[1], globalRowActionSelection: self.$globalSelection)
+            AlarmCard(alarm: Alarm.sampleAlarms[3], globalRowActionSelection: self.$globalSelection)
         }
         .environmentObject(testUserData)
     }

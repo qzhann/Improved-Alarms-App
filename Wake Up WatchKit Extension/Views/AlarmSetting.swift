@@ -7,33 +7,41 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AlarmSetting: View {
     @EnvironmentObject var userData: UserData
-    var alarm: Alarm
     @State var draftAlarm = Alarm.default
-    @State private var globalSelection: Int?
+    // a temporary storage to sync to the State during view's onAppear
+    var alarm: Alarm
     
-    var allSelections: [AlarmTime]
-
+    private var alarmTimeSelections: [AlarmTime]
+    private var snoozeStateSelections: [SnoozeState] = allSnoozeStates
+    private var sleepReminderStateSelections: [SleepReminderState] = allSleepReminderStates
+    
+    // picker selection managing
+    @State var globalPickerSelection: Int? = 0
+    
+    @State var crownRotation: Double = 0
     
     init(alarm: Alarm) {
-        self.allSelections = AlarmTime.allDayAlarmTimesFor(alarm.finalAlarmTime, stride: 15)
         self.alarm = alarm
-        self.draftAlarm = self.alarm
+        self.alarmTimeSelections = self.alarm.allDayAlarmTimeSelections
     }
     
     var body: some View {
         ScrollView {
-            VStack {
-                if !alarm.isConfigured {
-                    ConfigureAlarmButton(alarm: alarm)
+            VStack(spacing: 5) {
+                if !draftAlarm.isConfigured {
+                    ConfigureAlarmButton(draftAlarm: $draftAlarm)
                 } else {
-//                    ListRowStylePicker(label: "Final Alarm", selection: $draftAlarm.finalAlarmTime, allSelections: allSelections, isSelected: true)
-//                        .frame(width: screenWidth + 4)
 
                     Group {
-                        RemoveAlarmButton(alarm: alarm)
+                        ListRowStylePicker(label: "Final Alarm", selection: $draftAlarm.finalAlarmTime, allSelections: alarmTimeSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 0)
+                            
+                        ListRowStylePicker(label: "Snooze", selection: $draftAlarm.snoozeState, allSelections: snoozeStateSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
+                        
+                        RemoveAlarmButton(draftAlarm: $draftAlarm)
                     }
                 }
             }
@@ -42,20 +50,21 @@ struct AlarmSetting: View {
             self.draftAlarm = self.alarm
         }
         .onDisappear {
-            self.syncAlarm(self.draftAlarm, to: self.userData)
+            self.syncAlarm(self.draftAlarm, origionalAlarm: self.alarm, to: self.userData)
         }
-        .navigationBarTitle(alarm.day.description)
+        .navigationBarTitle(draftAlarm.day.description)
     }
     
     // Syncs the draft alarm back to the user data
-    func syncAlarm(_ draftAlarm: Alarm, to userData: UserData) {
-        userData.syncAlarm(draftAlarm)
+    func syncAlarm(_ draftAlarm: Alarm, origionalAlarm: Alarm, to userData: UserData) {
+        userData.syncAlarm(draftAlarm, origionalAlarm: origionalAlarm)
     }
 }
 
 struct ConfigureAlarmButton: View {
     @EnvironmentObject var userData: UserData
-    let alarm: Alarm
+    @Binding var draftAlarm: Alarm
+    
     var body: some View {
         Text("Configure Alarm")
             .font(.system(size: 17, weight: .regular))
@@ -64,18 +73,20 @@ struct ConfigureAlarmButton: View {
             .frame(height: 44)
             .background(Color.systemOrange.cornerRadius(listRowCornerRadius))
             .onTapGesture {
-                self.configureAlarm(self.alarm)
+                self.configureAlarm(self.draftAlarm)
             }
     }
     
     func configureAlarm(_ alarm: Alarm) {
         userData.configureAlarm(alarm)
+        draftAlarm.configure(using: userData.prefillAlarm)
     }
 }
 
 struct RemoveAlarmButton: View {
     @EnvironmentObject var userData: UserData
-    var alarm: Alarm
+    @Binding var draftAlarm: Alarm
+
     var body: some View {
         Text("Remove Alarm")
             .font(.system(size: 17, weight: .regular))
@@ -84,19 +95,21 @@ struct RemoveAlarmButton: View {
             .frame(height: 44)
             .background(Color.systemRed.cornerRadius(listRowCornerRadius))
             .onTapGesture {
-                self.removeAlarm(self.alarm)
+                self.removeAlarm(self.draftAlarm)
             }
     }
     
     func removeAlarm(_ alarm: Alarm) {
-        
+        userData.removeAlarm(alarm)
+        draftAlarm.isConfigured = false
     }
 }
 
 struct AlarmSetting_Previews: PreviewProvider {
-    @State static var previewAlarm = testUserData.alarms[4]
+    @State static var previewAlarm = testUserData.alarms[5]
     static var previews: some View {
         AlarmSetting(alarm: previewAlarm)
+            .environmentObject(testUserData)
     }
 }
 

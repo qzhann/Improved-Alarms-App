@@ -19,7 +19,7 @@ struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionVal
     var isSelected: Bool {
         globalExclusivePickerSelection == managedExclusivePickerSelection
     }
-        
+
     init(label: LabelContent, selection: Binding<SelectionValue>, allSelections: [SelectionValue], globalExclusivePickerSelection: Binding<Int?>, managedExclusivePickerSelection: Int) {
         self.label = label
         self._pickerSelectionValue = selection
@@ -31,17 +31,6 @@ struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionVal
     var body: some View {
         
         ZStack {
-            // row background
-            Group {
-                // Using if-else to achieve instant transition
-                if self.isSelected {
-                    Color.black.cornerRadius(listRowCornerRadius)
-                } else {
-                    Color.darkBackground.cornerRadius(listRowCornerRadius)
-                }
-                EmptyView()
-            }
-            
             // row content
             HStack {
                 // picker label
@@ -53,30 +42,35 @@ struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionVal
                 
                 Spacer()
                 
+                // selection label
                 Text(pickerSelectionValue.description)
                     .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
-                .fixedSize()
-                    .padding(.trailing, 8)
+                    .padding(.trailing, 9)
+                    .frame(height: 44)
+                    .fixedSize()
             }
-            
+
             // underlying picker
             Picker(selection: self.$pickerSelectionValue, label: EmptyView()) {
                 ForEach(self.allPickerSelectionValues, id: \.hashValue) { selection in
-                    HStack {
-                        Spacer()
-                        Text(selection.description)
-                            .font(Font.monospacedDigit(.system(size: 17, weight: .semibold, design: .rounded))())
-                            .padding(.trailing, 2)
-                    }.tag(selection)
+                    Text(selection.description).tag(selection)
                 }
-                // disable picker selection with gesture
-                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local))
             }
-            
             // hide the picker to prevent the default picker animation
             .mask(Circle().size(.zero))
         }
         .frame(height: 44)
+        .background(
+            // row background
+            Group {
+                // Using if-else to achieve instant transition
+                if self.isSelected {
+                    Color.black.cornerRadius(listRowCornerRadius)
+                } else {
+                    Color.darkBackground.cornerRadius(listRowCornerRadius)
+                }
+            }
+        )
         .overlay(   // selection border
             // Using color multiply to achive animation
             RoundedRectangle(cornerRadius: listRowCornerRadius)
@@ -101,7 +95,7 @@ struct ActionStylePicker_Preview: View {
     @State var globalPickerSelection: Int?
     @State var selection = AlarmTime(day: .tuesday, hour: 9, minute: 00)
     @State var selection2 = AlarmTime(day: .tuesday, hour: 10, minute: 45)
-    var allSelections = AlarmTime(day: .tuesday, hour: 1, minute: 00).alarmTimes(until: AlarmTime(day: .tuesday, hour: 1, minute: 00).endOfDay, stride: 15)
+    var allSelections = AlarmTime(day: .tuesday, hour: 0, minute: 00).alarmTimes(until: AlarmTime(day: .tuesday, hour: 1, minute: 00).endOfDay, stride: 15)
     var body: some View {
         VStack(spacing: 5) {
             HStack {
@@ -112,7 +106,6 @@ struct ActionStylePicker_Preview: View {
             ListRowStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 0)
             ListRowStylePicker(label: "Final Alarm", selection: $selection2, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
         }
-        
     }
 }
 

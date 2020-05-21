@@ -122,7 +122,13 @@ extension AlarmTime: CustomStringConvertible {
     }
 }
 
-extension AlarmTime: Equatable, Hashable, Codable {}
+extension AlarmTime: Equatable {
+    static func ==(lhs: AlarmTime, rhs: AlarmTime) -> Bool {
+        return lhs.day == rhs.day && lhs.hour == rhs.hour && lhs.minute == rhs.minute
+    }
+}
+
+extension AlarmTime: Hashable, Codable {}
 
 extension AlarmTime: Comparable {
     static func < (lhs: AlarmTime, rhs: AlarmTime) -> Bool {

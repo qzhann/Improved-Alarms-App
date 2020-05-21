@@ -36,6 +36,7 @@
 		F6C130BA245EAC420095B0A4 /* ListRowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130B9245EAC420095B0A4 /* ListRowAction.swift */; };
 		F6C130BC245EB09D0095B0A4 /* ListRowBackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */; };
 		F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */; };
+		F6EF7A102474F88200C26065 /* SupportingAlarmState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6EF7A0F2474F88200C26065 /* SupportingAlarmState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		F6C130B9245EAC420095B0A4 /* ListRowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowAction.swift; sourceTree = "<group>"; };
 		F6C130BB245EB09D0095B0A4 /* ListRowBackgroundColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowBackgroundColor.swift; sourceTree = "<group>"; };
 		F6C130BD245EB6F80095B0A4 /* View+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Helpers.swift"; sourceTree = "<group>"; };
+		F6EF7A0F2474F88200C26065 /* SupportingAlarmState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportingAlarmState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +206,7 @@
 				F69273ED245815C70070B91D /* SystemClock.swift */,
 				F69272A32453BCA60070B91D /* UserData.swift */,
 				F69273DD24569A320070B91D /* Alarm.swift */,
+				F6EF7A0F2474F88200C26065 /* SupportingAlarmState.swift */,
 				F69272A72453BDF40070B91D /* AlarmTime.swift */,
 				F69273D824556D6F0070B91D /* Weekday.swift */,
 			);
@@ -396,6 +399,7 @@
 				F6C130BE245EB6F80095B0A4 /* View+Helpers.swift in Sources */,
 				F69E37742465204700F6D7B1 /* AlarmSetting.swift in Sources */,
 				F69E377624653E7600F6D7B1 /* ListRowStylePicker.swift in Sources */,
+				F6EF7A102474F88200C26065 /* SupportingAlarmState.swift in Sources */,
 				F69273D724556B1C0070B91D /* AlarmCard.swift in Sources */,
 				F69272A82453BDF40070B91D /* AlarmTime.swift in Sources */,
 				F69273D924556D6F0070B91D /* Weekday.swift in Sources */,
