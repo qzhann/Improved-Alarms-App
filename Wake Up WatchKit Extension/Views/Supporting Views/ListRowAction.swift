@@ -8,20 +8,33 @@
 
 import SwiftUI
 
+extension View {
+    /// A custom modifier which adds a row action behavior.
+    /// - Parameters:
+    ///   - action: The action to perform when `viewContent` is tapped.
+    ///   - selectionManager: The row action selection manager used to manage row action selection exclusivity. Defaults to the `ExclusiveSelectionManager.shared`.
+    ///   - viewContent: The view content being displayed as the row action.
+    func listRowActionButton<ViewContent, SelectionValue>(globalSelection: Binding<SelectionValue?>, tag: SelectionValue, action: @escaping () -> Void, viewContent: () -> ViewContent) -> some View where ViewContent: View, SelectionValue: Hashable {
+        self.modifier(ListRowActionModifier(globalSelection: globalSelection, tag: tag, action: action, actionContent: viewContent()))
+    }
+}
+
 struct ListRowActionModifier<ActionContent, SelectionValue>: ViewModifier where ActionContent: View, SelectionValue: Hashable {
     let action: () -> Void
     let actionContent: ActionContent
+    
+    // exclusive picker selection managing
     @Binding private var globalSelection: SelectionValue?
-    private let managedSelection: SelectionValue
+    private let tag: SelectionValue
     var isSelected: Bool {
-        globalSelection == managedSelection
+        globalSelection == tag
     }
 
     @ObservedObject var translationState = TranslationState(trailingActionEndPosition: -(screenWidth / 2) - 1.5)
     
-    init(globalSelection: Binding<SelectionValue?>, managedSelection: SelectionValue, action: @escaping () -> Void, actionContent: ActionContent) {
+    init(globalSelection: Binding<SelectionValue?>, tag: SelectionValue, action: @escaping () -> Void, actionContent: ActionContent) {
         self._globalSelection = globalSelection
-        self.managedSelection = managedSelection
+        self.tag = tag
         self.action = action
         self.actionContent = actionContent
         
@@ -39,8 +52,8 @@ struct ListRowActionModifier<ActionContent, SelectionValue>: ViewModifier where 
                 // changes global selection if global selection was not selecting on the managed selection
                 DragGesture(minimumDistance: 16, coordinateSpace: .local)
                     .onChanged { (value) in
-                        if self.globalSelection != self.managedSelection {
-                            self.globalSelection = self.managedSelection
+                        if self.globalSelection != self.tag {
+                            self.globalSelection = self.tag
                         }
                     }
             )
@@ -59,9 +72,8 @@ struct ListRowActionModifier<ActionContent, SelectionValue>: ViewModifier where 
                         .saturation(self.translationState.saturationFactor)
                         .animation(Animation.linear(duration: 0.15))
                         // uses an linear animation here so that the brightness changes more dramatically than the scale effect. Provides user with more direct feedback that the swipe would soon cover up / reveal the row actions.
-                        
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                        .onTapGesture { // Using `.onTapGesture` instead of `Button` to avoid duplicated gesture recognition when tapping on the row
+                        .onTapGesture { // Using `.onTapGesture` instead of `Button` to avoid unintended gesture recognition when tapping on the row content instead of the row action content
                             self.action()
                             self.translationState.positionState = .default
                         }
@@ -76,23 +88,13 @@ struct ListRowActionModifier<ActionContent, SelectionValue>: ViewModifier where 
     }
 }
 
-extension View {
-    /// A custom modifier which adds a row action behavior.
-    /// - Parameters:
-    ///   - action: The action to perform when `viewContent` is tapped.
-    ///   - selectionManager: The row action selection manager used to manage row action selection exclusivity. Defaults to the `ExclusiveSelectionManager.shared`.
-    ///   - viewContent: The view content being displayed as the row action.
-    func listRowActionButton<ViewContent, ID>(globalSelection: Binding<ID?>, managedSelection: ID, action: @escaping () -> Void, viewContent: () -> ViewContent) -> some View where ViewContent: View, ID: Hashable {
-        self.modifier(ListRowActionModifier(globalSelection: globalSelection, managedSelection: managedSelection, action: action, actionContent: viewContent()))
-    }
-}
-
 struct ListRowAction_Preview: View {
-    @State var globalSelection: Alarm? = Alarm.default
+    @State var globalSelection: Int?
+    let alarmDay = AlarmDay.sampleAlarmDays[3]
     var body: some View {
         List {
             // The list row action has already been applied in the AlarmCard instance
-            AlarmCard(alarm: Alarm.sampleAlarms[3], globalRowActionSelection: self.$globalSelection)
+            AlarmDayCard(alarmDay: alarmDay, globalSelection: self.$globalSelection, tag: testUserData.alarmDays.firstIndex(of: alarmDay)!)
         }
         .environmentObject(testUserData)
     }

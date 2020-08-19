@@ -7,30 +7,42 @@
 //
 
 import SwiftUI
+import Combine
 
-struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionValue: Hashable, SelectionValue: CustomStringConvertible, LabelContent: View {
+struct ListRowStylePicker<PickerSelection, LabelContent, ExclusiveSelection>: View where PickerSelection: Hashable, PickerSelection: CustomStringConvertible, LabelContent: View, ExclusiveSelection: Hashable {
     let label: LabelContent
-    @Binding var pickerSelectionValue: SelectionValue
-    let allPickerSelectionValues: [SelectionValue]
+    @Binding var pickerSelectionValue: PickerSelection
+    let allPickerSelectionValues: [PickerSelection]
     
     // exclusive picker selection managing
-    @Binding private var globalExclusivePickerSelection: Int?
-    private let managedExclusivePickerSelection: Int
+    @Binding private var globalSelection: ExclusiveSelection?
+    private let tag: ExclusiveSelection
     var isSelected: Bool {
-        globalExclusivePickerSelection == managedExclusivePickerSelection
+        globalSelection == tag
     }
-
-    init(label: LabelContent, selection: Binding<SelectionValue>, allSelections: [SelectionValue], globalExclusivePickerSelection: Binding<Int?>, managedExclusivePickerSelection: Int) {
+        
+    init(label: LabelContent, selection: Binding<PickerSelection>, allSelections: [PickerSelection], globalSelection: Binding<ExclusiveSelection?>, tag: ExclusiveSelection) {
         self.label = label
         self._pickerSelectionValue = selection
         self.allPickerSelectionValues = allSelections
-        self._globalExclusivePickerSelection = globalExclusivePickerSelection
-        self.managedExclusivePickerSelection = managedExclusivePickerSelection
+        self._globalSelection = globalSelection
+        self.tag = tag
     }
     
     var body: some View {
-        
-        ZStack {
+//        print(Date(), tag, "refreshing")
+//        print(tag, allPickerSelectionValues[])
+        return ZStack {
+            // row background
+            Group {
+                // Using if-else to achieve instant transition
+                if self.isSelected {
+                    Color.black.cornerRadius(listRowCornerRadius)
+                } else {
+                    Color.darkBackground.cornerRadius(listRowCornerRadius)
+                }
+            }
+            
             // row content
             HStack {
                 // picker label
@@ -48,29 +60,24 @@ struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionVal
                     .padding(.trailing, 9)
                     .frame(height: 44)
                     .fixedSize()
+                    .animation(nil)
             }
-
-            // underlying picker
-            Picker(selection: self.$pickerSelectionValue, label: EmptyView()) {
-                ForEach(self.allPickerSelectionValues, id: \.hashValue) { selection in
-                    Text(selection.description).tag(selection)
+            
+            if isSelected {
+                // underlying picker
+//                DigitalCrownPicker(selection: $pickerSelectionValue, allSelections: self.allPickerSelectionValues)
+//                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                Picker(selection: $pickerSelectionValue.onChange(perform: { _ in self.setPickerActive(true) }), label: EmptyView()) {
+                    ForEach(self.allPickerSelectionValues, id: \.hashValue) { selection in
+                        Text(selection.description).tag(selection)
+                    }
                 }
+                // hide the picker to prevent the default picker animation
+                .mask(Circle().size(.zero))
             }
-            // hide the picker to prevent the default picker animation
-            .mask(Circle().size(.zero))
+            
         }
         .frame(height: 44)
-        .background(
-            // row background
-            Group {
-                // Using if-else to achieve instant transition
-                if self.isSelected {
-                    Color.black.cornerRadius(listRowCornerRadius)
-                } else {
-                    Color.darkBackground.cornerRadius(listRowCornerRadius)
-                }
-            }
-        )
         .overlay(   // selection border
             // Using color multiply to achive animation
             RoundedRectangle(cornerRadius: listRowCornerRadius)
@@ -80,31 +87,91 @@ struct ListRowStylePicker<SelectionValue, LabelContent>: View where SelectionVal
         )
         .onTapGesture {}    // activates the long press gesture
         .onLongPressGesture(minimumDuration: 0, maximumDistance: 0, pressing: { (_) in
-            withAnimation(.linear(duration: 0.2)) { self.globalExclusivePickerSelection = self.managedExclusivePickerSelection }
+            withAnimation(.linear(duration: 0.2)) {
+                // changes the picker selection
+                self.globalSelection = self.tag
+                // the pickers are now active
+                self.setPickerActive(true)
+            }
         }, perform: {})
+    }
+    
+    /// Sets the picker active state notification posting controller's `isActive` state.
+    func setPickerActive(_ value: Bool) {
+        if value == false {
+            globalSelection = nil
+        }
     }
 }
 
 extension ListRowStylePicker where LabelContent == Text {
-    init(label: String, selection: Binding<SelectionValue>, allSelections: [SelectionValue], globalExclusivePickerSelection: Binding<Int?>, managedExclusivePickerSelection: Int) {
-        self.init(label: Text(label), selection: selection, allSelections: allSelections, globalExclusivePickerSelection: globalExclusivePickerSelection, managedExclusivePickerSelection: managedExclusivePickerSelection)
+    init(label: String, selection: Binding<PickerSelection>, allSelections: [PickerSelection], globalSelection: Binding<ExclusiveSelection?>, tag: ExclusiveSelection) {
+        self.init(label: Text(label), selection: selection, allSelections: allSelections, globalSelection: globalSelection, tag: tag)
     }
 }
 
 struct ActionStylePicker_Preview: View {
-    @State var globalPickerSelection: Int?
-    @State var selection = AlarmTime(day: .tuesday, hour: 9, minute: 00)
-    @State var selection2 = AlarmTime(day: .tuesday, hour: 10, minute: 45)
-    var allSelections = AlarmTime(day: .tuesday, hour: 0, minute: 00).alarmTimes(until: AlarmTime(day: .tuesday, hour: 1, minute: 00).endOfDay, stride: 15)
+    @State private var isPickerActive = false
+    @State private var globalPickerSelection: Int?
+    @State private var selection = AlarmTime(day: .tuesday, hour: 9, minute: 00)
+    @State private var selection2 = AlarmTime(day: .tuesday, hour: 10, minute: 45)
+    var allSelections = AlarmTime.allDayAlarmTimes(for: .tuesday, stride: 15)
     var body: some View {
-        VStack(spacing: 5) {
-            HStack {
-                Text(selection.timeDescription)
-                Text(selection2.timeDescription)
+        ScrollView {
+            VStack(spacing: 5) {
+                Text("\(isPickerActive ? "Active" : "Not Active")")
+                HStack {
+                    Text(selection.timeDescription)
+                    Text(selection2.timeDescription)
+                }
+               
+                ListRowStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalSelection: $globalPickerSelection, tag: 0)
+                ListRowStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalSelection: $globalPickerSelection, tag: 1)
+                ListRowStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalSelection: $globalPickerSelection, tag: 2)
+                ListRowStylePicker(label: "Final Alarm", selection: $selection2, allSelections: allSelections, globalSelection: $globalPickerSelection, tag: 3)
             }
-           
-            ListRowStylePicker(label: "Final Alarm", selection: $selection, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 0)
-            ListRowStylePicker(label: "Final Alarm", selection: $selection2, allSelections: allSelections, globalExclusivePickerSelection: $globalPickerSelection, managedExclusivePickerSelection: 1)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .listRowStylePickersBecomeActive)) { (_) in
+            self.isPickerActive = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .listRowStylePickersBecomeInactive)) { (_) in
+            self.isPickerActive = false
+        }
+    }
+}
+
+struct TestPreview: View {
+    @State private var selection = 1
+    var body: some View {
+        ScrollView {
+            VStack {
+                
+                Picker(selection: $selection, label: EmptyView()) {
+                    ForEach(0..<5) { number in
+                        Text("\(number)")
+                    }
+                }
+                .frame(height: 44)
+                
+                Button(action: {}) {
+                    Text("Button")
+                }
+                .focusable()
+                
+                Picker(selection: $selection, label: EmptyView()) {
+                    ForEach(0..<5) { number in
+                        Text("\(number)")
+                    }
+                }
+                .frame(height: 44)
+                
+                Picker(selection: $selection, label: EmptyView()) {
+                    ForEach(0..<5) { number in
+                        Text("\(number)")
+                    }
+                }
+                .frame(height: 44)
+            }
         }
     }
 }
@@ -114,5 +181,6 @@ struct ActionStylePicker_Previews: PreviewProvider {
     static var previews: some View {
         // using a custom preview struct to circumvent the bug in using property wrapper with static properties
         ActionStylePicker_Preview()
+//        TestPreview()
     }
 }

@@ -12,16 +12,6 @@ import Foundation
 struct AlarmTime {
     private var underlyingDateComponents: DateComponents
     
-    /// Initializes an `AlarmTime` by specifying day, hour, and minute.
-    init(day: Weekday, hour: Int, minute: Int) {
-        var components = AlarmTime.baseComponents
-        components.weekday = day.rawValue
-        components.hour = hour
-        components.minute = minute
-        // Initializes using the date to ensure that even if hour, minute is beyond normal range, they could be normalized.
-        self.init(ofDate: components.date!)
-    }
-    
     /// Initializes an `AlarmTime` from a `Date`.
     init(ofDate date: Date) {
         let dateComponents = Calendar.autoupdatingCurrent.dateComponents([.weekday, .hour, .minute], from: date)
@@ -32,18 +22,38 @@ struct AlarmTime {
         self.underlyingDateComponents = resultComponents
     }
     
+    /// Initializes an `AlarmTime` by specifying day, hour, and minute.
+    init(day: Weekday = .sunday, hour: Int, minute: Int) {
+        var components = AlarmTime.baseComponents
+        components.weekday = day.rawValue
+        components.hour = hour
+        components.minute = minute
+        // Initializes using the date to ensure that even if hour, minute is beyond normal range, they could be normalized.
+        self.init(ofDate: components.date!)
+    }
+    
     /// Returns an `AlarmTime` indicating the start of day of the instance.
     var startOfDay: AlarmTime {
         return AlarmTime(ofDate: Calendar.autoupdatingCurrent.startOfDay(for: underlyingDateComponents.date!))
     }
     
     var endOfDay: AlarmTime {
-        return AlarmTime(ofDate: Calendar.autoupdatingCurrent.startOfDay(for: underlyingDateComponents.date!).advanced(by: 24.hour))
+        return AlarmTime(ofDate: Calendar.autoupdatingCurrent.startOfDay(for: underlyingDateComponents.date!).advanced(by: 23.hour + 59.minute))
     }
     
     /// Returns an  `AlarmTime` advanced by the `hours` hours and `minutes` minutes from the current `AlarmTime` instance.
     func advancedBy(hours: Int = 0, minutes: Int) -> AlarmTime {
         return AlarmTime(ofDate: underlyingDateComponents.date!.advanced(by: hours.hour + minutes.minute))
+    }
+    
+    /// Return the start of day `AlarmTime` for the specified weekday.
+    static func startOfDay(day: Weekday) -> AlarmTime {
+        return AlarmTime(day: day, hour: 0, minute: 0).startOfDay
+    }
+    
+    /// Return the end of day `AlarmTime` for the specified weekday.
+    static func endOfDay(day: Weekday) -> AlarmTime {
+        return AlarmTime(day: day, hour: 0, minute: 0).endOfDay
     }
     
     /// The base date components used to initialize a `Weekday`.
@@ -62,9 +72,13 @@ struct AlarmTime {
         formatter.timeStyle = .short
         return formatter
     }()
+    
+    static var `default`: AlarmTime {
+        return AlarmTime(day: .monday, hour: 0, minute: 00)
+    }
 }
 
-// MARK: View model
+// MARK: - View model
 
 extension AlarmTime {
     
@@ -83,11 +97,12 @@ extension AlarmTime {
     var date: Date {
         underlyingDateComponents.date!
     }
+    
     /// Generates an array of alarm time with range [`start`, `end`), each element is `stride` minutes later than the previous element in the array.
     /// - Parameters:
     ///   - start: The start time. `start` will always be included in the array.
     ///   - end: The end time. Indicates the upper asympototic time.
-    ///   - stride: number of minutes each element is later than its previous element.
+    ///   - strideMinute: number of minutes each element is later than its previous element.
     /// - Returns: An array of alarm time with range  [`start`, `end`). If `end` is smaller than `start` + `stride`, returns empty array.
     private static func alarmTimes(start: AlarmTime, end: AlarmTime, stride strideMinute: Int = 1) -> [AlarmTime] {
         var times = [AlarmTime]()
@@ -100,17 +115,22 @@ extension AlarmTime {
         return times
     }
     
-    /// Generates an array of alarm time with range [`self`, `end`), each element is `stride` minutes later than the previous element in the array.
+    /// Generates an array of alarm time starting from now to the end of day.
     /// - Parameters:
-    ///   - end: The end time. Indicates the upper asympototic time.
-    ///   - stride: number of minutes each element is later than its previous element.
-    /// - Returns: An array of alarm time with range  [`self```, `end`). If `end` is smaller than `start` + `stride`, returns empty array.
-    func alarmTimes(until end: AlarmTime, stride: Int = 1) -> [AlarmTime] {
-        return AlarmTime.alarmTimes(start: self, end: end, stride: stride)
+    ///   - strideMinute: number of minutes each element is later than its previous element
+    /// - Returns: An array of alarm time from now to the end of day.
+    func alarmTimesUntilEndOfDay(stride strideMinute: Int = 1) -> [AlarmTime] {
+        return AlarmTime.alarmTimes(start: self, end: self.endOfDay, stride: strideMinute)
     }
     
-    static func allDayAlarmTimesFor(_ alarmTime: AlarmTime, stride: Int = 1) -> [AlarmTime] {
-        return alarmTimes(start: alarmTime.startOfDay, end: alarmTime.endOfDay, stride: stride)
+    /// Generates an array of alarm time starting from the start of day to the end of day of the specified weekday.
+    /// - Parameters:
+    ///   - day: The day that the generated alarm times will be on
+    ///   - strideMinute: number of minutes each element is later than its previous element
+    /// - Returns: An array of alarm time from the start of day to the end of day on the specified weekday.
+    static func allDayAlarmTimes(for day: Weekday, stride strideMinute: Int = 1) -> [AlarmTime] {
+        let startOfDay = AlarmTime.startOfDay(day: day)
+        return alarmTimes(start: startOfDay, end: startOfDay.endOfDay, stride: strideMinute)
     }
 }
 

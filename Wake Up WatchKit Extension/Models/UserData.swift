@@ -10,14 +10,11 @@ import Foundation
 import SwiftUI
 import Combine
 
-var testUserData = UserData(alarms: Alarm.sampleAlarms, isAwakeConfirmed: false, nextAlarmDay: .friday)
+var testUserData = UserData(alarmDays: AlarmDay.sampleAlarmDays, isAwakeConfirmed: false, nextAlarmDay: .wednesday)
 
 final class UserData: ObservableObject {
-    @Published var alarms: [Alarm] {
-        didSet {
-            self.reorderAlarms(using: systemClock.currentAlarmTime)
-        }
-    }
+    @PublishedCollection var alarmDays: [AlarmDay]
+    var collectionCancellable: AnyCancellable?
     var prefillAlarm = Alarm.default
     var systemClock: SystemClock
     /// The last time `alarms` was reorderd. `mostRecentReorderDate` is usally set to be the start of day when reordering occurs, so that if the app did not launch in a week, it will trigger a reorder once it has reached past the start of day.
@@ -25,23 +22,23 @@ final class UserData: ObservableObject {
     /// Manages the subscription with `systemClock`'s `alarmTimeUpdate` publisher.
     var alarmTimeUpdateCancellable: AnyCancellable?
     
-    var nextAlarm: Alarm {
-        if alarms[0].isConfigured && !alarms[0].isMuted && !alarms[0].isAwakeConfirmed {
-            return alarms[0]
+    // FIXME: This needs to change
+    var nextAlarmDay: AlarmDay {
+        if let alarm = alarmDays[0].alarm, !alarm.isMuted, !alarm.isAwakeConfirmed {
+            return alarmDays[0]
         } else {
-            return alarms[1]
+            return alarmDays[1]
         }
     }
     
     /// Initializes a `UserData` by specifying alarms, systemClock, and lastUpdateDate.
     /// - Parameters:
-    ///   - alarms: An array of `Alarm` used by `UserData`.
+    ///   - alarms: An array of `AlarmDay` used by `UserData`.
     ///   - systemClock: The `SystemClock` used by `UserData`. Providing a non-default instance could change the clock speed, useful for testing.
     ///   - mostRecentReorderDate: The start of day of the most recent Date that `alarms` was reorderd.
-    init(alarms: [Alarm], prefillAlarm: Alarm = .default, systemClock: SystemClock = SystemClock(), mostRecentReorderDate: Date = Date()) {
-        assert(alarms.count >= 2, "alarms should have at least 2 items.")
-        let sortedAlarms = alarms.sorted(by: <)
-        self.alarms = sortedAlarms
+    init(alarmDays: [AlarmDay], prefillAlarm: Alarm = .default, systemClock: SystemClock = SystemClock(), mostRecentReorderDate: Date = Date()) {
+        let sortedAlarmDays = alarmDays.sorted(by: <)
+        self.alarmDays = sortedAlarmDays
         self.prefillAlarm = prefillAlarm
         self.systemClock = systemClock
         self.mostRecentReorderDate = mostRecentReorderDate
@@ -50,13 +47,20 @@ final class UserData: ObservableObject {
             .sink { currentTime in
                 self.reorderAlarms(using: currentTime)
             }
+        // send changes when alarmDays or any of its element changes
+        self.collectionCancellable = $alarmDays.sink { self.objectWillChange.send() }
     }
     
     /// Initializes a `UserData` by specifying alarms, the isAwakeConfirmed status for the 0th day, and the alarm that will appear for the next day.
-    convenience init(alarms: [Alarm], isAwakeConfirmed: Bool, nextAlarmDay: Weekday) {
-        let initialDate = alarms.first(where: { $0.day == nextAlarmDay })!.alarmInterval.start.advancedBy(minutes: -5).date
-        self.init(alarms: alarms, prefillAlarm: Alarm.default, systemClock: SystemClock.nonUpdatingClock(initialDate: initialDate), mostRecentReorderDate: initialDate)
-        self.alarms[0].isAwakeConfirmed = isAwakeConfirmed
+    convenience init(alarmDays: [AlarmDay], isAwakeConfirmed: Bool, nextAlarmDay: Weekday) {
+        let initialDate = alarmDays.first(where: { $0.day == nextAlarmDay })!.alarmInterval.start.advancedBy(minutes: -5).date
+        self.init(alarmDays: alarmDays, prefillAlarm: Alarm.default, systemClock: SystemClock.nonUpdatingClock(initialDate: initialDate), mostRecentReorderDate: initialDate)
+        
+        // Rotate the alarm days
+        let index = alarmDays.firstIndex(where: { $0.day == Weekday(rawValue: nextAlarmDay.rawValue - 1) })!
+        let rotatedDays = alarmDays.leftRotated(degree: index)
+        self.alarmDays = rotatedDays
+        self.alarmDays[0].alarm?.isAwakeConfirmed = false
     }
     
     // Cleans up memory
@@ -66,69 +70,67 @@ final class UserData: ObservableObject {
     
     /// Updates `alarms` using `currentTime`.
     private func reorderAlarms(using currentTime: AlarmTime) {
-        var newAlarms = reorderedAlarms(for: alarms.sorted(by: <), at: currentTime)
-        // If at least a week has passed, or the 0th alarm has changed due to the change of currentTime, perform the update
-        if mostRecentReorderDate.advanced(by: 7.day) < systemClock.currentDate || newAlarms[0].day != alarms[0].day {
-            // Reset all new alarm's isAwakeConfirmed state to true
-            for i in alarms.indices {
-                newAlarms[i].isAwakeConfirmed = true
-            }
-            
-            // If the 0th alarm is on and not muted, set its isWakeConfirmed state to false
-            if newAlarms[0].isConfigured && !newAlarms[0].isMuted {
-                newAlarms[0].isAwakeConfirmed = false
-            }
-            // Memorize the last update date as the start of day of now
-            self.mostRecentReorderDate = Calendar.autoupdatingCurrent.startOfDay(for: systemClock.currentDate)
-            
-            self.alarms = newAlarms
-        }        
+        // FIXME:
+//        var newAlarms = reorderedAlarms(for: alarms.sorted(by: <), at: currentTime)
+//        // If at least a week has passed, or the 0th alarm has changed due to the change of currentTime, perform the update
+//        if mostRecentReorderDate.advanced(by: 7.day) < systemClock.currentDate || newAlarms[0].day != alarms[0].day {
+//            // Reset all new alarm's isAwakeConfirmed state to true
+//            for i in alarms.indices {
+//                newAlarms[i].isAwakeConfirmed = true
+//            }
+//
+//            // If the 0th alarm is on and not muted, set its isWakeConfirmed state to false
+//            if newAlarms[0].isConfigured && !newAlarms[0].isMuted {
+//                newAlarms[0].isAwakeConfirmed = false
+//            }
+//            // Memorize the last update date as the start of day of now
+//            self.mostRecentReorderDate = Calendar.autoupdatingCurrent.startOfDay(for: systemClock.currentDate)
+//
+//            self.alarms = newAlarms
+//        }        
     }
     
-    /// Sets `isAwakeConfirmed` for alarm to true.
-    /// - Parameter alarm: The `Alarm` instance that needs to confirm awake.
-    func confirmAwake(for alarm: Alarm) {
-        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].isAwakeConfirmed = true
-    }
+//    /// Sets `isAwakeConfirmed` for alarm to true.
+//    /// - Parameter alarm: The `Alarm` instance that needs to confirm awake.
+//    func confirmAwake(for alarmDay: AlarmDay) {
+//        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
+//        self.alarms[alarmIndex].isAwakeConfirmed = true
+//    }
+//
+//    /// Toggles `isMuted` for alarm.
+//    /// - Parameter alarm: The `Alarm` instance that needs to toggle muted state.
+//    func toggleMuted(for alarm: Alarm) {
+//        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
+//        self.alarms[alarmIndex].isMuted.toggle()
+//    }
+//
+//    /// Replaces the alarm at the index of `origionalAlarm` with the new alarm
+//    func syncAlarm(_ newAlarm: Alarm, origionalAlarm: Alarm) {
+//        guard let alarmIndex = indexForAlarm(origionalAlarm) else { fatalError("Cannot find alarm") }
+//        self.alarms[alarmIndex].fill(using: newAlarm)
+//    }
     
-    /// Toggles `isMuted` for alarm.
-    /// - Parameter alarm: The `Alarm` instance that needs to toggle muted state.
-    func toggleMuted(for alarm: Alarm) {
-        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].isMuted.toggle()
-    }
-    
-    /// Replaces the alarm at the index of `origionalAlarm` with the new alarm
-    func syncAlarm(_ newAlarm: Alarm, origionalAlarm: Alarm) {
-        guard let alarmIndex = indexForAlarm(origionalAlarm) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].fill(using: newAlarm)
-    }
-    
-    /// Configures the specified alarm using the prefill alarm.
-    /// - Parameter alarm: The alarm that needs to be configured.
-    func configureAlarm(_ alarm: Alarm) {
-        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].configure(using: prefillAlarm)
+    /// Configures the alarm using the prefill alarm for the specified alarm day.
+    /// - Parameter alarmDay: The alarmDay that needs to configure a new alarm.
+    func configureAlarm(for alarmDay: AlarmDay) {
+        assert(alarmDay.alarm == nil, "Alarm day should not have alarm if it calls for a configure")
+        alarmDay.configureAlarm(using: prefillAlarm)
     }
     
     /// Removes the specified alarm. Current implementation sets the specified alarm's `isConfigured` to false.
-    func removeAlarm(_ alarm: Alarm) {
-        guard let alarmIndex = indexForAlarm(alarm) else { fatalError("Cannot find alarm") }
-        self.alarms[alarmIndex].isConfigured = false
+    /// - Parameter alarmDay: The alarmDay that needs to remove its alarm.
+    func removeAlarm(for alarmDay: AlarmDay) {
+        // We call removeAlarm on the userData instead of on the alarm day directly so that configure and remove can exhibit symmetrical patterns
+        assert(alarmDay.alarm != nil, "Alarm day should have existing alarm if it calls for a remove")
+        alarmDay.removeAlarm()
     }
-    
-    private func indexForAlarm(_ alarm: Alarm) -> Int? {
-        self.alarms.firstIndex(where: {$0.id == alarm.id})
-    }
-    
 }
 
 // MARK: - Basic behavior protocols
 
 extension UserData: Equatable {
     static func == (lhs: UserData, rhs: UserData) -> Bool {
-        return lhs.alarms == rhs.alarms &&
+        return lhs.alarmDays == rhs.alarmDays &&
             lhs.prefillAlarm == rhs.prefillAlarm &&
             lhs.mostRecentReorderDate == rhs.mostRecentReorderDate
     }
@@ -136,23 +138,23 @@ extension UserData: Equatable {
 
 extension UserData: Codable {
     enum CodingKeys: String, CodingKey {
-        case alarms
+        case alarmDays
         case prefillAlarm
         case lastUpdateDate
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(alarms, forKey: .alarms)
+        try container.encode(alarmDays, forKey: .alarmDays)
         try container.encode(prefillAlarm, forKey: .prefillAlarm)
         try container.encode(mostRecentReorderDate, forKey: .lastUpdateDate)
     }
     
     convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let alarms = try container.decode([Alarm].self, forKey: .alarms)
+        let alarmDays = try container.decode([AlarmDay].self, forKey: .alarmDays)
         let prefillAlarm = try container.decode(Alarm.self, forKey: .prefillAlarm)
         let lastUpdateDate = try container.decode(Date.self, forKey: .lastUpdateDate)
-        self.init(alarms: alarms, prefillAlarm: prefillAlarm, mostRecentReorderDate: lastUpdateDate)
+        self.init(alarmDays: alarmDays, prefillAlarm: prefillAlarm, mostRecentReorderDate: lastUpdateDate)
     }
 }

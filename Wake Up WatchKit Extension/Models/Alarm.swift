@@ -8,10 +8,6 @@
 
 import Foundation
 
-enum ScheduleState {
-    case ringing, scheduled, scheduledAndMuted, inactive
-}
-
 /// Represents an alarm for a day.
 struct Alarm: Identifiable {
     var id = UUID()
@@ -58,10 +54,6 @@ struct Alarm: Identifiable {
         }
     }
     
-    lazy var allDayAlarmTimeSelections: [AlarmTime] = {
-        AlarmTime.allDayAlarmTimesFor(finalAlarmTime, stride: 15)
-    }()
-    
     /// Fills the current alarm using the specfied alarm.
     mutating func fill(using alarm: Alarm) {
         self.isMuted = alarm.isMuted
@@ -105,70 +97,13 @@ extension Alarm {
     var day: Weekday {
         finalAlarmTime.day
     }
-    
-    private var mutedDescription: String { "MUTED" }
-    private var offDescription: String {"No Alarm"}
-    
-    var timeDescription: String {
-        if self.isConfigured {
-            if self.isMuted {
-                return mutedDescription
-            } else {
-                return finalAlarmTime.timeDescription
-            }
-        } else {
-            return offDescription
-        }
-    }
-    
-    var stateImageName: String {
-        if self.isConfigured {
-            if self.isMuted {
-                return "bell.slash.fill"
-            } else {
-                return "bell.fill"
-            }
-        } else {
-            return "zzz"
-        }
-    }
-    
-    var rowActionImageName: String {
-        guard self.isConfigured else { fatalError("Off alarms should not display row action image") }
-
-        if isMuted {
-            return "bell.fill"
-        } else {
-            return "bell.slash.fill"
-        }
-    }
-    
-    func scheduleState(in userData: UserData) -> ScheduleState {
-        if !self.isConfigured {
-            return .inactive
-        } else {
-            if self == userData.alarms[0] {
-                if !self.isAwakeConfirmed {
-                    return .ringing
-                } else {
-                    return .inactive
-                }
-            } else {
-                if self.isMuted {
-                    return .scheduledAndMuted
-                } else {
-                    return .scheduled
-                }
-            }
-        }
-    }
 }
 
 // MARK: - Basic behavior protocols
 
 extension Alarm: CustomStringConvertible {
     var description: String {
-        return "\(self.day) \(self.timeDescription) isAwakeConfirmed: \(self.isAwakeConfirmed)"
+        return "\(self.day) \(self.finalAlarmTime.timeDescription) isAwakeConfirmed: \(self.isAwakeConfirmed)"
     }
 }
 

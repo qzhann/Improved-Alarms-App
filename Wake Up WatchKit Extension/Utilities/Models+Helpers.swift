@@ -8,6 +8,13 @@
 
 import Foundation
 
+// Returns image names for different purposes
+extension String {
+    static var onAlarm: String { "bell.fill" }
+    static var mutedAlarm: String { "bell.slash.fill" }
+    static var noAlarm: String { "zzz" }
+}
+
 /// Generates an reodered array of alarms using the current time. The current time is guaranteed to be between the 0th alarm and the 1st alarm.
 /// - Parameters:
 ///   - alarms: The array of alarms to update from. `alarms` is expected to be sorted in increasing startTime.

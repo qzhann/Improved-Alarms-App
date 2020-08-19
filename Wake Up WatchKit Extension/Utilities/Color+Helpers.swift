@@ -60,50 +60,63 @@ extension Color {
     static var darkBackground: Color {
         Color(integerValueRed: 51, green: 51, blue: 51)
     }
+    static var buttonBackground: Color {
+        Color(integerValueRed: 30, green: 30, blue: 30)
+    }
 }
 
 // MARK: - View model
 extension Color {
-    static func listRowPlatterColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = alarm.scheduleState(in: userData)
+    static func listRowPlatterColor(for alarmDay: AlarmDay, in userData: UserData) -> Color {
+        let sheduleState = alarmDay.alarmScheduleState(in: userData)
         switch sheduleState {
-        case .scheduled, .ringing:
+        case .futureActive, .ringing:
             return .systemOrange
-        case .scheduledAndMuted:
+        case .futureMuted:
             return .darkOrange
-        case .inactive:
+        case .pastActive, .pastMuted, .noAlarm:
             return .darkBackground
         }
     }
     
-    static func rowActionBackgroundColor(for alarm: Alarm) -> Color {
+    static func rowActionBackgroundColor(for alarmDay: AlarmDay) -> Color {
+        guard let alarm = alarmDay.alarm else { return .clear }
         if alarm.isMuted {
-            return .orange
+            return .systemOrange
         } else {
             return .systemGrey
         }
     }
     
-    static func primaryTextColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = alarm.scheduleState(in: userData)
+    static func primaryTextColor(for alarmDay: AlarmDay, in userData: UserData) -> Color {
+        let sheduleState = alarmDay.alarmScheduleState(in: userData)
         switch sheduleState {
-        case .scheduled, .ringing, .scheduledAndMuted:
+        case .futureActive, .ringing, .futureMuted:
             return .darkText
-        case .inactive:
+        case .pastActive, .pastMuted, .noAlarm:
             return .white
         }
     }
     
-    static func secondaryTextColor(for alarm: Alarm, in userData: UserData) -> Color {
-        let sheduleState = alarm.scheduleState(in: userData)
+    static func secondaryTextColor(for alarmDay: AlarmDay, in userData: UserData) -> Color {
+        let sheduleState = alarmDay.alarmScheduleState(in: userData)
         switch sheduleState {
-        case .scheduled, .ringing, .scheduledAndMuted:
+        case .futureActive, .ringing, .futureMuted:
             return .white
-        case .inactive:
+        case .pastActive, .pastMuted, .noAlarm:
             return .systemTextGrey
         }
     }
     
+    static func alarmStateImageColor(for alarmDay: AlarmDay, in userData: UserData) -> Color {
+        let sheduleState = alarmDay.alarmScheduleState(in: userData)
+        switch sheduleState {
+        case .pastActive:
+            return .systemOrange
+        default:
+            return .secondaryTextColor(for: alarmDay, in: userData)
+        }
+    }
 }
 
 struct ColorsPreview: PreviewProvider {

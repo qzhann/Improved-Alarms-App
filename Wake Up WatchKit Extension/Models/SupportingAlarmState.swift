@@ -8,35 +8,38 @@
 
 import Foundation
 
-enum SnoozeState {
+enum ScheduleState {
+    case ringing, futureActive, futureMuted, pastActive, pastMuted, noAlarm
+}
+
+enum SnoozeState: CaseIterable {
     case off
     case duration(minutes: Int)
+    
+    /// an array of states including `.off`, and `.duration` starting from 1 and ending at 60, incremented by one minute for each element.
+    static var allCases: [SnoozeState] = {
+        var states = [SnoozeState]()
+        states.append(.off)
+        for duration in 1...60 {
+            states.append(.duration(minutes: duration))
+        }
+        return states
+    }()
 }
 
-/// an array of states including `.off`, and `.duration` starting from 1 and ending at 60, incremented by one minute for each element.
-let allSnoozeStates: [SnoozeState] = {
-    var states = [SnoozeState]()
-    states.append(.off)
-    for duration in 1...60 {
-        states.append(.duration(minutes: duration))
-    }
-    return states
-}()
-
-enum SleepReminderState {
+enum SleepReminderState: CaseIterable {
     case off
     case duration(hours: Int)
+    
+    /// an array of states exluding `.off`, and `.duration` starting from 1 and ending at 23, incremented by one hour for each element.
+    static var allCases: [SleepReminderState] = {
+        var states = [SleepReminderState]()
+        for duration in 1..<24 {
+            states.append(.duration(hours: duration))
+        }
+        return states
+    }()
 }
-
-/// an array of states including `.off`, and `.duration` starting from 1 and ending at 23, incremented by one hour for each element.
-let allSleepReminderStates: [SleepReminderState] = {
-    var states = [SleepReminderState]()
-    states.append(.off)
-    for duration in 1..<24 {
-        states.append(.duration(hours: duration))
-    }
-    return states
-}()
 
 // MARK: - Basic behavior protocols
 
