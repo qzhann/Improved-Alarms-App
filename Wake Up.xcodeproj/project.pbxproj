@@ -89,6 +89,7 @@
 /* Begin PBXFileReference section */
 		F624953224810EDC0078AC0B /* Binding+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Helpers.swift"; sourceTree = "<group>"; };
 		F6249534248244A80078AC0B /* DigitalCrownPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalCrownPicker.swift; sourceTree = "<group>"; };
+		F6298E7924ED079000310424 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F65CDD972477BB0B00C16144 /* PropertyWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyWrappers.swift; sourceTree = "<group>"; };
 		F65CDD992478FFCD00C16144 /* AlarmDaySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmDaySetting.swift; sourceTree = "<group>"; };
 		F65CDDD7247F81EF00C16144 /* NotificationCenter+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Helpers.swift"; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 		F692725E2453B48F0070B91D = {
 			isa = PBXGroup;
 			children = (
+				F6298E7924ED079000310424 /* README.md */,
 				F692726D2453B4900070B91D /* Wake Up WatchKit App */,
 				F692727C2453B4920070B91D /* Wake Up WatchKit Extension */,
 				F69272662453B48F0070B91D /* Products */,
