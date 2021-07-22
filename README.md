@@ -1,4 +1,4 @@
-#  Wake Up
+#  Improved Alarms App
 
 Exploration of an alternative watchOS Alarms experience. Implemented in SwiftUI and Combine.
 
